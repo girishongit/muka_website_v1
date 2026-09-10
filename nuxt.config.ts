@@ -38,6 +38,11 @@ export default defineNuxtConfig({
     '@oro.ad/nuxt-claude-devtools'
   ],
 
+  site: {
+    url: 'https://munichkannadigaru.org',
+    name: 'Munich Kannadigaru'
+  },
+
   nitro: {
     prerender: {
       routes: [
