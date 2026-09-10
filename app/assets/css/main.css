@@ -1,0 +1,202 @@
+/* ── Design Tokens ───────────────────────────────────────── */
+:root {
+  --brand:        #8B1A1A;   /* Karnataka crimson */
+  --brand-hover:  #B22222;
+  --gold:         #C9A84C;   /* turmeric / sandalwood */
+  --surface:      #FEFCF5;   /* parchment white */
+  --surface-2:    #F5EFE0;   /* warmer card background */
+  --ink:          #1C1008;   /* warm near-black */
+  --ink-muted:    #5C4A2A;   /* brown-toned muted */
+  --border:       #DDD0B3;   /* aged parchment crease */
+
+  --font-serif:   'Lora', Georgia, 'Times New Roman', serif;
+  --font-kannada: 'Tiro Kannada', serif;
+
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 64px;
+
+  --radius:    6px;
+  --max-read:  680px;
+  --max-wide:  1100px;
+}
+
+/* ── Base Reset ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.7;
+  background: var(--surface);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a {
+  color: var(--brand);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--brand-hover); }
+
+/* ── Typography ──────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0 0 var(--space-md);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 600; }
+h3 { font-size: 1.15rem; font-weight: 600; }
+
+p { margin: 0 0 var(--space-md); color: var(--ink); }
+p:last-child { margin-bottom: 0; }
+
+ul, ol {
+  padding-left: var(--space-lg);
+  margin: 0 0 var(--space-md);
+  color: var(--ink);
+}
+li { margin-bottom: var(--space-xs); }
+
+.kannada {
+  font-family: var(--font-kannada);
+  font-size: 1.05em;
+}
+
+/* ── Layout Containers ───────────────────────────────────── */
+.container {
+  width: min(var(--max-wide), 92vw);
+  margin: 0 auto;
+}
+
+.container-read {
+  width: min(var(--max-read), 92vw);
+  margin: 0 auto;
+}
+
+/* ── Page Structure ──────────────────────────────────────── */
+.page-content {
+  padding: var(--space-xl) 0 var(--space-2xl);
+  min-height: 70vh;
+}
+
+.page-title {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--gold);
+}
+
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+/* ── Content Card ────────────────────────────────────────── */
+.content-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: var(--space-lg) var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.content-card h2,
+.content-card h3 {
+  margin-bottom: var(--space-sm);
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--brand-hover);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--brand);
+  border: 1.5px solid var(--brand);
+}
+.btn-outline:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* ── Forms ───────────────────────────────────────────────── */
+.form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--ink);
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s;
+  appearance: none;
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.form-textarea { resize: vertical; min-height: 120px; }
+
+/* ── Gold Divider ────────────────────────────────────────── */
+.gold-rule {
+  border: none;
+  border-top: 1.5px solid var(--gold);
+  margin: var(--space-xl) 0;
+  opacity: 0.6;
+}
+
+/* ── Responsive Media Queries ────────────────────────────── */
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .page-content { padding: var(--space-lg) 0 var(--space-xl); }
+  .content-card { padding: var(--space-md) var(--space-lg); }
+}
