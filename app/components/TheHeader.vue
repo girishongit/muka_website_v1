@@ -10,7 +10,7 @@
         class="hamburger"
         :class="{ open: menuOpen }"
         aria-label="Toggle navigation menu"
-        :aria-expanded="menuOpen"
+        :aria-expanded="String(menuOpen)"
         @click="toggleMenu"
       >
         <span></span>

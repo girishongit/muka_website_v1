@@ -2,70 +2,72 @@
   <div class="container-read">
     <h1 class="page-title">Contact Us</h1>
 
-    <div class="content-card">
-      <h2>Get in touch</h2>
-      <ul class="contact-list">
-        <li>
-          <strong>Email</strong>
-          <a href="mailto:kannadacommunitymunich@gmail.com">kannadacommunitymunich@gmail.com</a>
-        </li>
-        <li>
-          <strong>Location</strong>
-          Munich, Germany
-        </li>
-      </ul>
+    <div class="contact-layout">
+      <div class="content-card contact-info">
+        <h2>Get in touch</h2>
+        <ul class="contact-list">
+          <li>
+            <strong>Email</strong>
+            <a href="mailto:kannadacommunitymunich@gmail.com">kannadacommunitymunich@gmail.com</a>
+          </li>
+          <li>
+            <strong>Location</strong>
+            Munich, Germany
+          </li>
+        </ul>
+      </div>
+
+      <div v-if="submitted" class="content-card">
+        <h2>Message sent!</h2>
+        <p>Thank you for reaching out. We'll get back to you as soon as possible.</p>
+      </div>
+
+      <!-- TODO: wire up to API endpoint — replace @submit.prevent with actual fetch/axios call -->
+      <!-- TODO: add CAPTCHA / Turnstile before going live to prevent abuse -->
+      <form v-else class="content-card contact-form" @submit.prevent="handleSubmit" novalidate>
+        <h2>Send a message</h2>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-name">Your name</label>
+          <input
+            id="contact-name"
+            v-model="form.name"
+            class="form-input"
+            type="text"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-email">Email address</label>
+          <input
+            id="contact-email"
+            v-model="form.email"
+            class="form-input"
+            type="email"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Message</label>
+          <textarea
+            id="contact-message"
+            v-model="form.message"
+            class="form-textarea"
+            required
+          ></textarea>
+        </div>
+
+        <p v-if="error" class="form-error" role="alert">{{ error }}</p>
+
+        <button type="submit" class="btn btn-primary" :disabled="loading">
+          {{ loading ? 'Sending…' : 'Send message' }}
+        </button>
+      </form>
     </div>
-
-    <div v-if="submitted" class="content-card">
-      <h2>Message sent!</h2>
-      <p>Thank you for reaching out. We'll get back to you as soon as possible.</p>
-    </div>
-
-    <!-- TODO: wire up to API endpoint — replace @submit.prevent with actual fetch/axios call -->
-    <!-- TODO: add CAPTCHA / Turnstile before going live to prevent abuse -->
-    <form v-else class="content-card contact-form" @submit.prevent="handleSubmit" novalidate>
-      <h2>Send a message</h2>
-
-      <div class="form-group">
-        <label class="form-label" for="contact-name">Your name</label>
-        <input
-          id="contact-name"
-          v-model="form.name"
-          class="form-input"
-          type="text"
-          required
-          autocomplete="name"
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="contact-email">Email address</label>
-        <input
-          id="contact-email"
-          v-model="form.email"
-          class="form-input"
-          type="email"
-          required
-          autocomplete="email"
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="contact-message">Message</label>
-        <textarea
-          id="contact-message"
-          v-model="form.message"
-          class="form-textarea"
-          required
-        ></textarea>
-      </div>
-
-      <p v-if="error" class="form-error" role="alert">{{ error }}</p>
-
-      <button type="submit" class="btn btn-primary" :disabled="loading">
-        {{ loading ? 'Sending…' : 'Send message' }}
-      </button>
-    </form>
   </div>
 </template>
 
@@ -101,6 +103,11 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
+.contact-layout {
+  display: grid;
+  gap: var(--space-lg);
+}
+
 .contact-list {
   list-style: none;
   padding: 0;

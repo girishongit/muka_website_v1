@@ -20,7 +20,7 @@
 
     <!-- Initiatives -->
     <section class="section" aria-label="Our initiatives">
-      <h2 class="section-heading">What we do</h2>
+      <h2 class="section-title">What we do</h2>
       <div class="initiative-grid">
         <NuxtLink to="/initiatives/karnataka-cultural" class="initiative-card">
           <h3>Karnataka Cultural</h3>
@@ -117,7 +117,7 @@ useSeoMeta({
 }
 
 /* Section heading */
-.section-heading {
+.section-title {
   margin-bottom: var(--space-lg);
   color: var(--ink-muted);
   font-size: 0.9rem;
