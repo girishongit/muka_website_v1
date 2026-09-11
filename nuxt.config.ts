@@ -13,13 +13,13 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Tiro+Kannada&display=swap'
+          href: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600&display=swap'
         }
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'A Kannada community in Munich celebrating language, culture, and belonging.' },
-        { name: 'theme-color', content: '#8B1A1A' }
+        { name: 'theme-color', content: '#C41E3A' }
       ]
     }
   },

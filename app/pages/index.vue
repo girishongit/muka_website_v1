@@ -1,65 +1,151 @@
 <template>
   <div>
-    <!-- Hero -->
-    <section class="hero" aria-label="Welcome">
-      <div class="hero-inner">
-        <p class="hero-eyebrow kannada">ಕನ್ನಡ ಸಮುದಾಯ — ಮ್ಯೂನಿಕ್</p>
-        <h1 class="hero-title">We carry Karnataka<br>wherever we go.</h1>
-        <p class="hero-subtitle">
-          A community of Kannadigas in and around Munich — celebrating language,
-          culture, and belonging across generations.
-        </p>
-        <div class="hero-actions">
-          <NuxtLink to="/membership" class="btn btn-primary">Join the community</NuxtLink>
-          <NuxtLink to="/about" class="btn btn-outline">Learn more</NuxtLink>
+    <!-- ─── Hero ────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-container">
+        <!-- Content left -->
+        <div class="hero-content">
+          <span class="tag">Welcome to our Community</span>
+          <h1 class="hero-title">
+            <span class="hero-title-black">Munich</span>
+            <span class="hero-title-gradient">Kannadigaru</span>
+          </h1>
+          <p class="hero-kannada kannada-text">ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು</p>
+
+          <blockquote class="hero-quote">
+            <p class="kannada-text">"ಎಲ್ಲಾದರು ಇರು ಎಂತಾದರು ಇರು<br>ಎಂದೆಂದಿಗೂ ನೀ ಕನ್ನಡವಾಗಿರು.."</p>
+            <cite class="kannada-text">— ಕುವೆಂಪು</cite>
+          </blockquote>
+
+          <p class="hero-desc">
+            A vibrant community of passionate individuals from Karnataka and the Kannada-speaking tribe,
+            dedicated to uniting all Kannada speakers in and around Munich.
+          </p>
+
+          <div class="hero-buttons">
+            <NuxtLink to="/membership/register" class="btn btn-primary">
+              Join Our Community <span aria-hidden="true">→</span>
+            </NuxtLink>
+            <NuxtLink to="/about" class="btn btn-outline">Learn More</NuxtLink>
+          </div>
+        </div>
+
+        <!-- Image right -->
+        <div class="hero-image">
+          <img
+            src="https://images.unsplash.com/photo-1616606484004-5ef3cc46e39d?w=800&q=80"
+            alt="Karnataka Heritage - Stone Chariot at Hampi"
+          />
+          <span class="image-badge est">Est. 2019</span>
+          <div class="image-label">
+            <small>Heritage</small>
+            <span>Stone Chariot</span>
+          </div>
+          <div class="small-image">
+            <img
+              src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=200&q=80"
+              alt="Karnataka Temple"
+            />
+          </div>
         </div>
       </div>
     </section>
 
-    <hr class="gold-rule" />
+    <!-- ─── Events ───────────────────────────────────────────── -->
+    <section class="section events-section">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="tag">Upcoming Events</span>
+          <h2 class="section-title">
+            <span class="black">Join Our</span>
+            <span class="red"> Celebrations</span>
+          </h2>
+        </div>
 
-    <!-- Initiatives -->
-    <section class="section" aria-label="Our initiatives">
-      <h2 class="section-title">What we do</h2>
-      <div class="initiative-grid">
-        <NuxtLink to="/initiatives/karnataka-cultural" class="initiative-card">
-          <h3>Karnataka Cultural</h3>
-          <p>Festivals, music, dance, and folk traditions celebrating Karnataka's artistic heritage in Munich.</p>
-        </NuxtLink>
-        <NuxtLink to="/initiatives/jnana-deepa" class="initiative-card">
-          <h3>Jnana Deepa</h3>
-          <p>Workshops, mentorship, and knowledge-sharing programs for students and young professionals.</p>
-        </NuxtLink>
-        <NuxtLink to="/initiatives/kannada-kali" class="initiative-card">
-          <h3>Kannada Kali</h3>
-          <p>Structured Kannada language classes for children and adults, keeping the language alive abroad.</p>
-        </NuxtLink>
+        <div class="event-card">
+          <div class="event-content">
+            <span class="event-tag">📅 Featured Event</span>
+            <h3>UTSAVA 2025</h3>
+            <p class="event-kannada kannada-text">"ಉತ್ಸವ ೨೦೨೫"</p>
+            <p>Our flagship annual cultural festival celebrating Karnataka's rich heritage through music, dance, food, and community bonding.</p>
+            <NuxtLink to="/events/utsava-2025" class="btn btn-white">
+              Learn More <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+          <div class="event-image">
+            <img
+              src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80"
+              alt="UTSAVA 2025 Cultural Celebration"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
-    <hr class="gold-rule" />
+    <!-- ─── Initiatives ──────────────────────────────────────── -->
+    <section class="section initiatives-section">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="tag">Our Initiatives</span>
+          <h2 class="section-title">
+            <span class="black">Programs That</span>
+            <span class="red"> Matter</span>
+          </h2>
+          <p class="section-subtitle">We run several initiatives to keep our culture alive and thriving in Munich.</p>
+        </div>
 
-    <!-- UTSAVA 2025 CTA -->
-    <section class="section" aria-label="UTSAVA 2025">
-      <div class="event-cta-inner">
-        <p class="kannada event-kn">ಉತ್ಸವ ೨೦೨೫</p>
-        <h2>UTSAVA 2025 — Karnataka Rajyotsava</h2>
-        <p>
-          Join us for a grand celebration of Karnataka Rajyotsava with cultural performances,
-          community dinner, and festive activities for all age groups.
-        </p>
-        <NuxtLink to="/events/utsava-2025" class="btn btn-primary">View event details</NuxtLink>
+        <div class="initiatives-grid">
+          <div class="initiative-card">
+            <div class="initiative-icon icon-red">
+              <span aria-hidden="true">🎵</span>
+            </div>
+            <h3>Karnataka Cultural</h3>
+            <p class="kannada-text initiative-kn">ಕರ್ನಾಟಕ ಸಾಂಸ್ಕೃತಿಕ</p>
+            <p>Celebrating the rich cultural heritage of Karnataka through various programs and events.</p>
+            <NuxtLink to="/initiatives/karnataka-cultural" class="link-arrow">
+              Learn More <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+
+          <div class="initiative-card">
+            <div class="initiative-icon icon-gold">
+              <span aria-hidden="true">📖</span>
+            </div>
+            <h3>Jnana Deepa</h3>
+            <p class="kannada-text initiative-kn">ಜ್ಞಾನ ದೀಪ</p>
+            <p>Our Kannada library initiative promoting literature and knowledge sharing.</p>
+            <NuxtLink to="/initiatives/jnana-deepa" class="link-arrow">
+              Learn More <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+
+          <div class="initiative-card">
+            <div class="initiative-icon icon-green">
+              <span aria-hidden="true">👥</span>
+            </div>
+            <h3>Kannada Kali</h3>
+            <p class="kannada-text initiative-kn">ಕನ್ನಡ ಕಲಿ</p>
+            <p>Learn Kannada through our structured learning programs for all age groups.</p>
+            <NuxtLink to="/initiatives/kannada-kali" class="link-arrow">
+              Learn More <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+        </div>
       </div>
     </section>
 
-    <hr class="gold-rule" />
-
-    <!-- Kannada script feature -->
-    <section class="section" aria-label="Our values">
-      <blockquote class="kannada-quote">
-        <p class="kannada">ನಮ್ಮ ಸಂಸ್ಕೃತಿ ನಮ್ಮ ಹೆಮ್ಮೆ</p>
-        <footer>Our culture, our pride.</footer>
-      </blockquote>
+    <!-- ─── CTA ──────────────────────────────────────────────── -->
+    <section class="section cta-section">
+      <div class="section-container">
+        <div class="cta-box">
+          <h2>Become part of our growing community</h2>
+          <p>Experience the joy of connecting with fellow Kannadigas in Munich.</p>
+          <div class="cta-buttons">
+            <NuxtLink to="/membership/register" class="btn btn-primary">Join Now <span aria-hidden="true">→</span></NuxtLink>
+            <NuxtLink to="/contact" class="btn btn-outline">Contact Us</NuxtLink>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -67,139 +153,322 @@
 <script setup>
 useSeoMeta({
   title: 'Munich Kannadigaru — ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು',
-  description: 'A vibrant Kannada community in Munich celebrating language, culture, and belonging.'
+  description: 'A vibrant community of Kannadigas in Munich celebrating language, culture, and belonging.'
 })
 </script>
 
 <style scoped>
-/* Hero */
+/* ─── Hero ─────────────────────────────────────────────────── */
 .hero {
-  padding: var(--space-2xl) 0;
+  padding: 60px 0 80px;
+  background: var(--cream);
 }
 
-.hero-inner {
-  max-width: 640px;
-  animation: hero-in 0.6s ease both;
+.hero-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
-@keyframes hero-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-inner { animation: none; }
-}
-
-.hero-eyebrow {
-  font-size: 1.1rem;
-  color: var(--ink-muted);
-  margin-bottom: var(--space-sm);
+.hero-content .tag {
+  margin-bottom: 25px;
+  display: inline-block;
 }
 
 .hero-title {
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-  line-height: 1.15;
-  margin-bottom: var(--space-lg);
-  color: var(--brand);
+  font-size: clamp(44px, 6vw, 72px);
+  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.1;
+}
+.hero-title-black {
+  color: var(--text-dark);
+  display: block;
+}
+.hero-title-gradient {
+  background: linear-gradient(90deg, var(--gold) 0%, var(--primary-red) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
 }
 
-.hero-subtitle {
-  font-size: 1.1rem;
-  color: var(--ink-muted);
-  max-width: 520px;
-  margin-bottom: var(--space-xl);
+.hero-kannada {
+  font-size: 28px;
+  color: var(--text-dark);
+  margin-bottom: 30px;
 }
 
-.hero-actions {
+.hero-quote {
+  border-left: 4px solid var(--gold);
+  padding-left: 25px;
+  margin: 0 0 30px;
+}
+.hero-quote p {
+  font-size: 20px;
+  font-style: italic;
+  color: var(--text-dark);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+.hero-quote cite {
+  display: block;
+  color: var(--primary-red);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 15px;
+}
+
+.hero-desc {
+  color: var(--text-light);
+  margin-bottom: 35px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.hero-buttons {
   display: flex;
-  gap: var(--space-md);
+  gap: 20px;
   flex-wrap: wrap;
 }
 
-/* Section heading */
-.section-title {
-  margin-bottom: var(--space-lg);
-  color: var(--ink-muted);
-  font-size: 0.9rem;
+/* Hero Image */
+.hero-image {
+  position: relative;
+}
+.hero-image > img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+  border-radius: 20px;
+  z-index: 2;
+  pointer-events: none;
+}
+.image-badge {
+  position: absolute;
+  background: var(--gold);
+  color: var(--text-dark);
+  padding: 12px 24px;
+  border-radius: 10px;
   font-weight: 600;
-  border-left: 3px solid var(--gold);
-  padding-left: var(--space-sm);
+  z-index: 3;
+}
+.image-badge.est {
+  top: -15px;
+  right: -15px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+}
+.image-label {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(255,255,255,0.95);
+  padding: 15px 25px;
+  border-radius: 12px;
+  z-index: 3;
+}
+.image-label small {
+  display: block;
+  color: var(--text-light);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.image-label span {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--text-dark);
+}
+.small-image {
+  position: absolute;
+  bottom: -30px;
+  left: -30px;
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 4px solid var(--white);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  z-index: 3;
+}
+.small-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Initiative grid */
-.initiative-grid {
+/* ─── Events ─────────────────────────────────────────────── */
+.events-section {
+  background: var(--cream);
+}
+
+.event-card {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-lg);
+  grid-template-columns: 1fr 1fr;
+  background: var(--primary-red);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(196, 30, 58, 0.2);
+}
+.event-content {
+  padding: 60px;
+  color: var(--white);
+}
+.event-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 30px;
+  padding: 8px 20px;
+  margin-bottom: 25px;
+  font-family: 'Manrope', sans-serif;
+}
+.event-content h3 {
+  font-size: clamp(36px, 4vw, 52px);
+  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+  color: var(--white);
+}
+.event-kannada {
+  font-size: 26px;
+  color: var(--gold);
+  margin-bottom: 25px;
+  display: block;
+}
+.event-content p {
+  opacity: 0.9;
+  margin-bottom: 35px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+.event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Initiatives ─────────────────────────────────────────── */
+.initiatives-section {
+  background: var(--cream-dark);
+}
+
+.initiatives-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
 }
 
 .initiative-card {
-  display: block;
-  padding: var(--space-lg);
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  text-decoration: none;
-  color: var(--ink);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 40px 35px;
+  transition: box-shadow 0.3s, transform 0.3s;
 }
 .initiative-card:hover {
-  border-color: var(--brand);
-  box-shadow: 0 4px 16px rgba(139, 26, 26, 0.08);
-  color: var(--ink);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
 }
+
+.initiative-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+.icon-red { background: rgba(196, 30, 58, 0.08); }
+.icon-gold { background: rgba(229, 184, 76, 0.12); }
+.icon-green { background: rgba(76, 175, 80, 0.08); }
+
 .initiative-card h3 {
-  color: var(--brand);
-  margin-bottom: var(--space-xs);
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+  color: var(--text-dark);
+}
+.initiative-kn {
+  color: var(--primary-red);
+  font-size: 15px;
+  margin-bottom: 18px;
+  display: block;
 }
 .initiative-card p {
-  font-size: 0.92rem;
-  color: var(--ink-muted);
-  margin: 0;
+  color: var(--text-light);
+  font-size: 15px;
+  margin-bottom: 25px;
+  line-height: 1.7;
 }
 
-/* Event CTA */
-.event-cta-inner {
-  background: var(--ink);
-  border-radius: var(--radius);
-  padding: var(--space-xl);
-  color: #e8dcc8;
-}
-.event-cta-inner h2 {
-  color: var(--gold);
-  margin-bottom: var(--space-md);
-}
-.event-cta-inner p {
-  color: #c8b89a;
-  margin-bottom: var(--space-lg);
-}
-.event-kn {
-  font-size: 1.4rem;
-  color: var(--gold);
-  margin-bottom: var(--space-xs);
-}
+/* ─── CTA ──────────────────────────────────────────────────── */
+.cta-section { background: var(--cream); }
 
-/* Kannada quote */
-.kannada-quote {
-  margin: 0 auto;
-  max-width: 480px;
-  padding: var(--space-xl);
-  border: none;
+.cta-box {
   text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
 }
-.kannada-quote p {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  color: var(--brand);
-  margin-bottom: var(--space-sm);
-  line-height: 1.4;
+.cta-box h2 {
+  font-size: clamp(28px, 4vw, 42px);
+  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+  color: var(--text-dark);
 }
-.kannada-quote footer {
-  font-size: 0.95rem;
-  color: var(--ink-muted);
-  font-style: italic;
+.cta-box p {
+  color: var(--text-light);
+  margin-bottom: 35px;
+  font-size: 16px;
+}
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 640px) {
-  .event-cta-inner { padding: var(--space-lg); }
+/* ─── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero-container { grid-template-columns: 1fr; }
+  .event-card { grid-template-columns: 1fr; }
+  .initiatives-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-image img { height: 400px; }
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 40px 0 70px; }
+  .hero-container { padding: 0 20px; gap: 30px; }
+  .hero-kannada { font-size: 22px; }
+  .hero-buttons { flex-direction: column; }
+  .hero-buttons .btn { width: 100%; justify-content: center; }
+  .hero-image img { height: 280px; }
+  .small-image { display: none; }
+  .image-badge.est { top: -10px; right: -5px; }
+  .event-content { padding: 35px 25px; }
+  .initiatives-grid { grid-template-columns: 1fr; }
 }
 </style>

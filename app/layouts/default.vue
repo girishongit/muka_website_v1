@@ -1,10 +1,9 @@
 <template>
   <div class="site-wrapper">
+    <div class="karnataka-ribbon" aria-hidden="true"></div>
     <TheHeader />
     <main class="page-content">
-      <div class="container">
-        <slot />
-      </div>
+      <slot />
     </main>
     <TheFooter />
   </div>
