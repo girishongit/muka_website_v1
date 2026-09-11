@@ -155,31 +155,38 @@
                 </div>
               </div>
               <div class="form-group">
-                <label>Where are you from in Karnataka? <span class="required">*</span></label>
-                <input type="text" v-model="form.fromKarnataka" required placeholder="e.g. Mysuru, Bengaluru, Dharwad…" />
+                <label>About Your Family <span class="required">*</span></label>
+                <p class="field-hint">Tell us a little about yourselves — where you are originally from in Karnataka, which city/area you currently live in Munich, and what you do here (e.g. profession or field of work). This helps us connect families from the same region.</p>
+                <textarea v-model="form.aboutFamily" required rows="4" placeholder="e.g. We are from Mysuru, currently living in Schwabing. I work as a software engineer and my partner is a teacher."></textarea>
               </div>
 
               <h3 class="form-section-title">Class Preference</h3>
               <div class="form-group">
-                <label>Preferred Day to Attend Classes <span class="required">*</span></label>
-                <select v-model="form.preferredDay" required>
-                  <option value="" disabled>Select a day</option>
-                  <option>Saturday</option>
-                  <option>Sunday</option>
-                  <option>Either Saturday or Sunday</option>
-                </select>
+                <label>Preferred Day(s) to Attend Classes <span class="required">*</span></label>
+                <p class="field-hint">Select all days that work for your family. We will try to accommodate your preference when scheduling.</p>
+                <div class="days-checkboxes">
+                  <label class="day-option" v-for="day in availableDays" :key="day">
+                    <input type="checkbox" :value="day" v-model="form.preferredDays" />
+                    <span>{{ day }}</span>
+                  </label>
+                </div>
               </div>
 
               <div class="disclaimer-box">
-                <label class="checkbox-item">
+                <p class="disclaimer-title">Please read before submitting</p>
+                <ul class="disclaimer-list">
+                  <li>Kannada Kali is a community initiative offered on a <strong>voluntary contribution basis</strong> — there is no fixed fee. Contributions help cover material and coordination costs.</li>
+                  <li>Students will need to <strong>purchase the course workbook</strong> (available online). We will share the link after enrollment is confirmed.</li>
+                  <li>Classes run in small groups of 3–5 children and are scheduled based on availability of families and the volunteer teacher.</li>
+                  <li>We will reach out to you via phone or email to confirm your spot and share class details.</li>
+                </ul>
+                <label class="checkbox-item checkbox-confirm">
                   <input type="checkbox" v-model="form.disclaimerAccepted" required />
-                  <span>
-                    I understand that Kannada Kali classes are offered on a <strong>contribution basis</strong>. I also acknowledge that students are required to <strong>purchase the course book online</strong>, which will be arranged by the coordinators. We will be contacted with class details and schedules.
-                  </span>
+                  <span>I have read and understood the above. I agree to the contribution-based model and will arrange the course workbook for my child.</span>
                 </label>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-full" :disabled="submitting || !form.disclaimerAccepted">
+              <button type="submit" class="btn btn-primary btn-full" :disabled="submitting || !form.disclaimerAccepted || form.preferredDays.length === 0">
                 {{ submitting ? 'Submitting…' : 'Submit Enrollment →' }}
               </button>
             </form>
@@ -201,9 +208,11 @@ const submitting = ref(false)
 const formSuccess = ref(false)
 const formError = ref(false)
 
+const availableDays = ['Saturday', 'Sunday', 'Weekday evening (Monday–Friday)']
+
 const form = reactive({
   fatherName: '', motherName: '', email: '', phone: '',
-  kidName: '', kidAge: '', fromKarnataka: '', preferredDay: '',
+  kidName: '', kidAge: '', aboutFamily: '', preferredDays: [],
   disclaimerAccepted: false
 })
 
@@ -217,7 +226,7 @@ function closeForm() {
   document.body.style.overflow = ''
   if (formSuccess.value) {
     formSuccess.value = false
-    Object.assign(form, { fatherName: '', motherName: '', email: '', phone: '', kidName: '', kidAge: '', fromKarnataka: '', preferredDay: '', disclaimerAccepted: false })
+    Object.assign(form, { fatherName: '', motherName: '', email: '', phone: '', kidName: '', kidAge: '', aboutFamily: '', preferredDays: [], disclaimerAccepted: false })
   }
 }
 
@@ -409,14 +418,69 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .disclaimer-box {
   background: var(--cream-dark);
   border-radius: 12px;
-  padding: 18px 22px;
+  padding: 22px 24px;
   margin: 22px 0;
   border-left: 4px solid var(--gold);
 }
+.disclaimer-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Manrope', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+}
+.disclaimer-list {
+  padding-left: 18px;
+  margin-bottom: 18px;
+}
+.disclaimer-list li {
+  color: var(--text-light);
+  font-size: 13px;
+  line-height: 1.75;
+  margin-bottom: 8px;
+}
+.disclaimer-list li:last-child { margin-bottom: 0; }
+.disclaimer-list strong { color: var(--text-dark); }
 .checkbox-item { display: flex; align-items: flex-start; gap: 14px; cursor: pointer; }
+.checkbox-confirm {
+  padding-top: 16px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
 .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-red); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
-.checkbox-item span { color: var(--text-light); font-size: 14px; line-height: 1.7; }
-.checkbox-item strong { color: var(--text-dark); }
+.checkbox-item span { color: var(--text-light); font-size: 14px; line-height: 1.7; font-weight: 500; }
+
+.field-hint {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
+
+.days-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.day-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px 16px;
+  border: 2px solid var(--border-light);
+  border-radius: 10px;
+  transition: border-color 0.2s, background 0.2s;
+  font-size: 14px;
+  color: var(--text-dark);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+}
+.day-option:hover { border-color: rgba(196,30,58,0.3); background: rgba(196,30,58,0.02); }
+.day-option input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--primary-red); cursor: pointer; flex-shrink: 0; }
+.day-option:has(input:checked) { border-color: var(--primary-red); background: rgba(196,30,58,0.04); }
 
 .btn-full { width: 100%; justify-content: center; margin-top: 5px; }
 .btn-full:disabled { opacity: 0.5; cursor: not-allowed; }
