@@ -3,26 +3,25 @@
     <!-- ─── Hero ────────────────────────────────────────────── -->
     <section class="hero">
       <div class="hero-container">
-        <!-- Content left -->
-        <div class="hero-content">
-          <span class="tag">Welcome to our Community</span>
-          <h1 class="hero-title">
+        <div class="hero-content" ref="heroContent">
+          <span class="tag animate-item">Welcome to our Community</span>
+          <h1 class="hero-title animate-item delay-1">
             <span class="hero-title-black">Munich</span>
             <span class="hero-title-gradient">Kannadigaru</span>
           </h1>
-          <p class="hero-kannada kannada-text">ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು</p>
+          <p class="hero-kannada kannada-text animate-item delay-2">ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು</p>
 
-          <blockquote class="hero-quote">
+          <blockquote class="hero-quote animate-item delay-3">
             <p class="kannada-text">"ಎಲ್ಲಾದರು ಇರು ಎಂತಾದರು ಇರು<br>ಎಂದೆಂದಿಗೂ ನೀ ಕನ್ನಡವಾಗಿರು.."</p>
             <cite class="kannada-text">— ಕುವೆಂಪು</cite>
           </blockquote>
 
-          <p class="hero-desc">
+          <p class="hero-desc animate-item delay-4">
             A vibrant community of passionate individuals from Karnataka and the Kannada-speaking tribe,
             dedicated to uniting all Kannada speakers in and around Munich.
           </p>
 
-          <div class="hero-buttons">
+          <div class="hero-buttons animate-item delay-5">
             <NuxtLink to="/membership/register" class="btn btn-primary">
               Join Our Community <span aria-hidden="true">→</span>
             </NuxtLink>
@@ -30,14 +29,14 @@
           </div>
         </div>
 
-        <!-- Image right -->
-        <div class="hero-image">
+        <div class="hero-image animate-from-right" ref="heroImage">
           <img
             src="https://images.unsplash.com/photo-1616606484004-5ef3cc46e39d?w=800&q=80"
-            alt="Karnataka Heritage - Stone Chariot at Hampi"
+            alt="Karnataka Heritage — Stone Chariot at Hampi"
           />
-          <span class="image-badge est">Est. 2019</span>
-          <div class="image-label">
+          <span class="image-badge-est">Est. 2019</span>
+          <!-- Transparent label directly on image -->
+          <div class="image-label-overlay">
             <small>Heritage</small>
             <span>Stone Chariot</span>
           </div>
@@ -51,10 +50,36 @@
       </div>
     </section>
 
+    <!-- ─── About ────────────────────────────────────────────── -->
+    <section class="section about-section" ref="aboutSection">
+      <div class="about-container">
+        <div class="about-image animate-observe">
+          <img
+            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80"
+            alt="Kannadigas community gathering"
+          />
+          <div class="about-badge">
+            <span class="about-badge-number">500+</span>
+            <span class="about-badge-label">Active Members</span>
+          </div>
+        </div>
+        <div class="about-content animate-observe delay-1">
+          <span class="tag">About Us</span>
+          <h2 class="about-heading">
+            Building Bridges,<br>
+            <span class="red">Preserving Culture</span>
+          </h2>
+          <p>Looking for ways to improve your social life and connect with like-minded Kannadigas? Look no further than our Kannada community! We're passionate about creating a strong and vibrant community that promotes personal growth and well-being.</p>
+          <p>Through regular events and activities such as cultural festivals, sports tournaments, and social gatherings, we're more than just a social club — we're a source of support for our members.</p>
+          <NuxtLink to="/about" class="link-arrow">Read More About Us <span aria-hidden="true">→</span></NuxtLink>
+        </div>
+      </div>
+    </section>
+
     <!-- ─── Events ───────────────────────────────────────────── -->
     <section class="section events-section">
       <div class="section-container">
-        <div class="section-header">
+        <div class="section-header animate-observe">
           <span class="tag">Upcoming Events</span>
           <h2 class="section-title">
             <span class="black">Join Our</span>
@@ -62,7 +87,7 @@
           </h2>
         </div>
 
-        <div class="event-card">
+        <div class="event-card animate-observe">
           <div class="event-content">
             <span class="event-tag">📅 Featured Event</span>
             <h3>UTSAVA 2025</h3>
@@ -72,7 +97,9 @@
               Learn More <span aria-hidden="true">→</span>
             </NuxtLink>
           </div>
-          <div class="event-image">
+          <div class="event-image-wrap">
+            <!-- Crimson-to-transparent gradient overlay on left side of image -->
+            <div class="event-image-overlay" aria-hidden="true"></div>
             <img
               src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80"
               alt="UTSAVA 2025 Cultural Celebration"
@@ -85,7 +112,7 @@
     <!-- ─── Initiatives ──────────────────────────────────────── -->
     <section class="section initiatives-section">
       <div class="section-container">
-        <div class="section-header">
+        <div class="section-header animate-observe">
           <span class="tag">Our Initiatives</span>
           <h2 class="section-title">
             <span class="black">Programs That</span>
@@ -95,40 +122,26 @@
         </div>
 
         <div class="initiatives-grid">
-          <div class="initiative-card">
-            <div class="initiative-icon icon-red">
-              <span aria-hidden="true">🎵</span>
-            </div>
+          <div class="initiative-card animate-observe">
+            <div class="initiative-icon icon-red">🎵</div>
             <h3>Karnataka Cultural</h3>
             <p class="kannada-text initiative-kn">ಕರ್ನಾಟಕ ಸಾಂಸ್ಕೃತಿಕ</p>
             <p>Celebrating the rich cultural heritage of Karnataka through various programs and events.</p>
-            <NuxtLink to="/initiatives/karnataka-cultural" class="link-arrow">
-              Learn More <span aria-hidden="true">→</span>
-            </NuxtLink>
+            <NuxtLink to="/initiatives/karnataka-cultural" class="link-arrow">Learn More <span aria-hidden="true">→</span></NuxtLink>
           </div>
-
-          <div class="initiative-card">
-            <div class="initiative-icon icon-gold">
-              <span aria-hidden="true">📖</span>
-            </div>
+          <div class="initiative-card animate-observe delay-1">
+            <div class="initiative-icon icon-gold">📖</div>
             <h3>Jnana Deepa</h3>
             <p class="kannada-text initiative-kn">ಜ್ಞಾನ ದೀಪ</p>
             <p>Our Kannada library initiative promoting literature and knowledge sharing.</p>
-            <NuxtLink to="/initiatives/jnana-deepa" class="link-arrow">
-              Learn More <span aria-hidden="true">→</span>
-            </NuxtLink>
+            <NuxtLink to="/initiatives/jnana-deepa" class="link-arrow">Learn More <span aria-hidden="true">→</span></NuxtLink>
           </div>
-
-          <div class="initiative-card">
-            <div class="initiative-icon icon-green">
-              <span aria-hidden="true">👥</span>
-            </div>
+          <div class="initiative-card animate-observe delay-2">
+            <div class="initiative-icon icon-green">👥</div>
             <h3>Kannada Kali</h3>
             <p class="kannada-text initiative-kn">ಕನ್ನಡ ಕಲಿ</p>
             <p>Learn Kannada through our structured learning programs for all age groups.</p>
-            <NuxtLink to="/initiatives/kannada-kali" class="link-arrow">
-              Learn More <span aria-hidden="true">→</span>
-            </NuxtLink>
+            <NuxtLink to="/initiatives/kannada-kali" class="link-arrow">Learn More <span aria-hidden="true">→</span></NuxtLink>
           </div>
         </div>
       </div>
@@ -137,7 +150,7 @@
     <!-- ─── CTA ──────────────────────────────────────────────── -->
     <section class="section cta-section">
       <div class="section-container">
-        <div class="cta-box">
+        <div class="cta-box animate-observe">
           <h2>Become part of our growing community</h2>
           <p>Experience the joy of connecting with fellow Kannadigas in Munich.</p>
           <div class="cta-buttons">
@@ -155,15 +168,72 @@ useSeoMeta({
   title: 'Munich Kannadigaru — ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು',
   description: 'A vibrant community of Kannadigas in Munich celebrating language, culture, and belonging.'
 })
+
+// Intersection Observer for scroll animations
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' })
+
+  document.querySelectorAll('.animate-observe').forEach(el => observer.observe(el))
+})
 </script>
 
 <style scoped>
+/* ─── Scroll animation base states ──────────────────────────── */
+.animate-observe {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.animate-observe.delay-1 { transition-delay: 0.1s; }
+.animate-observe.delay-2 { transition-delay: 0.2s; }
+.animate-observe.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero items animate on mount */
+.animate-item {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.7s ease forwards;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.animate-from-right {
+  opacity: 0;
+  transform: translateX(32px);
+  animation: fadeRight 0.8s ease 0.3s forwards;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeRight {
+  to { opacity: 1; transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-item, .animate-from-right, .animate-observe {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ─── Hero ─────────────────────────────────────────────────── */
 .hero {
   padding: 60px 0 80px;
   background: var(--cream);
 }
-
 .hero-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -173,22 +243,14 @@ useSeoMeta({
   gap: 60px;
   align-items: center;
 }
-
-.hero-content .tag {
-  margin-bottom: 25px;
-  display: inline-block;
-}
-
+.hero-content .tag { margin-bottom: 25px; display: inline-block; }
 .hero-title {
   font-size: clamp(44px, 6vw, 72px);
   margin-bottom: 15px;
   font-family: 'Playfair Display', serif;
   line-height: 1.1;
 }
-.hero-title-black {
-  color: var(--text-dark);
-  display: block;
-}
+.hero-title-black { color: var(--text-dark); display: block; }
 .hero-title-gradient {
   background: linear-gradient(90deg, var(--gold) 0%, var(--primary-red) 100%);
   -webkit-background-clip: text;
@@ -196,13 +258,7 @@ useSeoMeta({
   background-clip: text;
   display: block;
 }
-
-.hero-kannada {
-  font-size: 28px;
-  color: var(--text-dark);
-  margin-bottom: 30px;
-}
-
+.hero-kannada { font-size: 28px; color: var(--text-dark); margin-bottom: 30px; }
 .hero-quote {
   border-left: 4px solid var(--gold);
   padding-left: 25px;
@@ -222,24 +278,11 @@ useSeoMeta({
   font-style: normal;
   font-size: 15px;
 }
-
-.hero-desc {
-  color: var(--text-light);
-  margin-bottom: 35px;
-  font-size: 16px;
-  line-height: 1.8;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
+.hero-desc { color: var(--text-light); margin-bottom: 35px; font-size: 16px; line-height: 1.8; }
+.hero-buttons { display: flex; gap: 20px; flex-wrap: wrap; }
 
 /* Hero Image */
-.hero-image {
-  position: relative;
-}
+.hero-image { position: relative; }
 .hero-image > img {
   width: 100%;
   height: 500px;
@@ -247,53 +290,56 @@ useSeoMeta({
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
   display: block;
-  position: relative;
-  z-index: 1;
 }
-.hero-image::after {
+/* dark-to-transparent gradient at bottom for text legibility */
+.hero-image::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
-  border-radius: 20px;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  border-radius: 0 0 20px 20px;
   z-index: 2;
   pointer-events: none;
 }
-.image-badge {
+.image-badge-est {
   position: absolute;
+  top: -15px;
+  right: -15px;
   background: var(--gold);
   color: var(--text-dark);
   padding: 12px 24px;
   border-radius: 10px;
-  font-weight: 600;
-  z-index: 3;
-}
-.image-badge.est {
-  top: -15px;
-  right: -15px;
+  font-weight: 700;
   font-family: 'Playfair Display', serif;
   font-size: 18px;
-}
-.image-label {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  background: rgba(255,255,255,0.95);
-  padding: 15px 25px;
-  border-radius: 12px;
   z-index: 3;
 }
-.image-label small {
-  display: block;
-  color: var(--text-light);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+/* Transparent label directly on image — text with subtle shadow, no box */
+.image-label-overlay {
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+  z-index: 3;
+  color: var(--white);
+  text-align: right;
 }
-.image-label span {
+.image-label-overlay small {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  opacity: 0.9;
+  font-family: 'Manrope', sans-serif;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  margin-bottom: 2px;
+}
+.image-label-overlay span {
   font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  color: var(--text-dark);
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
 }
 .small-image {
   position: absolute;
@@ -307,17 +353,60 @@ useSeoMeta({
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   z-index: 3;
 }
-.small-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.small-image img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ─── About ─────────────────────────────────────────────────── */
+.about-section { background: #F5F5F0; }
+.about-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
+.about-image { position: relative; }
+.about-image img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+}
+.about-badge {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: var(--primary-red);
+  color: var(--white);
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  z-index: 2;
+}
+.about-badge-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  display: block;
+  line-height: 1;
+}
+.about-badge-label { font-size: 14px; opacity: 0.9; display: block; margin-top: 4px; }
+.about-content { padding-bottom: 20px; }
+.about-content .tag { margin-bottom: 20px; display: inline-block; }
+.about-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 48px);
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+.about-heading .red { color: var(--primary-red); }
+.about-content p { color: var(--text-light); font-size: 16px; margin-bottom: 16px; line-height: 1.8; }
 
 /* ─── Events ─────────────────────────────────────────────── */
-.events-section {
-  background: var(--cream);
-}
-
+.events-section { background: var(--cream); }
 .event-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -351,36 +440,38 @@ useSeoMeta({
   font-family: 'Playfair Display', serif;
   color: var(--white);
 }
-.event-kannada {
-  font-size: 26px;
-  color: var(--gold);
-  margin-bottom: 25px;
-  display: block;
+.event-kannada { font-size: 26px; color: var(--gold); margin-bottom: 25px; display: block; }
+.event-content p { opacity: 0.9; margin-bottom: 35px; font-size: 16px; line-height: 1.8; }
+
+/* Event image with left-edge crimson gradient overlay */
+.event-image-wrap {
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
 }
-.event-content p {
-  opacity: 0.9;
-  margin-bottom: 35px;
-  font-size: 16px;
-  line-height: 1.8;
+.event-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--primary-red) 0%, transparent 60%);
+  z-index: 1;
+  pointer-events: none;
 }
-.event-image img {
+.event-image-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  position: absolute;
+  inset: 0;
 }
 
 /* ─── Initiatives ─────────────────────────────────────────── */
-.initiatives-section {
-  background: var(--cream-dark);
-}
-
+.initiatives-section { background: var(--cream-dark); }
 .initiatives-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
-
 .initiative-card {
   background: var(--white);
   border-radius: 20px;
@@ -391,84 +482,53 @@ useSeoMeta({
   box-shadow: 0 20px 60px rgba(0,0,0,0.1);
   transform: translateY(-5px);
 }
-
 .initiative-icon {
-  width: 70px;
-  height: 70px;
+  width: 70px; height: 70px;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 25px;
-  font-size: 28px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 25px; font-size: 28px;
 }
-.icon-red { background: rgba(196, 30, 58, 0.08); }
-.icon-gold { background: rgba(229, 184, 76, 0.12); }
-.icon-green { background: rgba(76, 175, 80, 0.08); }
-
+.icon-red  { background: rgba(196,30,58,0.08); }
+.icon-gold { background: rgba(229,184,76,0.12); }
+.icon-green{ background: rgba(76,175,80,0.08); }
 .initiative-card h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  font-family: 'Playfair Display', serif;
-  color: var(--text-dark);
+  font-size: 24px; margin-bottom: 10px;
+  font-family: 'Playfair Display', serif; color: var(--text-dark);
 }
-.initiative-kn {
-  color: var(--primary-red);
-  font-size: 15px;
-  margin-bottom: 18px;
-  display: block;
-}
-.initiative-card p {
-  color: var(--text-light);
-  font-size: 15px;
-  margin-bottom: 25px;
-  line-height: 1.7;
-}
+.initiative-kn { color: var(--primary-red); font-size: 15px; margin-bottom: 18px; display: block; }
+.initiative-card p { color: var(--text-light); font-size: 15px; margin-bottom: 25px; line-height: 1.7; }
 
 /* ─── CTA ──────────────────────────────────────────────────── */
 .cta-section { background: var(--cream); }
-
-.cta-box {
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto;
-}
+.cta-box { text-align: center; max-width: 700px; margin: 0 auto; }
 .cta-box h2 {
-  font-size: clamp(28px, 4vw, 42px);
-  margin-bottom: 15px;
-  font-family: 'Playfair Display', serif;
-  color: var(--text-dark);
+  font-size: clamp(28px,4vw,42px); margin-bottom: 15px;
+  font-family: 'Playfair Display', serif; color: var(--text-dark);
 }
-.cta-box p {
-  color: var(--text-light);
-  margin-bottom: 35px;
-  font-size: 16px;
-}
-.cta-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+.cta-box p { color: var(--text-light); margin-bottom: 35px; font-size: 16px; }
+.cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
 
 /* ─── Responsive ──────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .hero-container { grid-template-columns: 1fr; }
-  .event-card { grid-template-columns: 1fr; }
-  .initiatives-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-container, .about-container, .event-card { grid-template-columns: 1fr; }
+  .initiatives-grid { grid-template-columns: repeat(2,1fr); }
   .hero-image img { height: 400px; }
+  .about-image img { height: 320px; }
+  .about-badge { bottom: -10px; right: 10px; }
 }
-
 @media (max-width: 768px) {
   .hero { padding: 40px 0 70px; }
-  .hero-container { padding: 0 20px; gap: 30px; }
+  .hero-container, .about-container { padding: 0 20px; gap: 30px; }
   .hero-kannada { font-size: 22px; }
   .hero-buttons { flex-direction: column; }
   .hero-buttons .btn { width: 100%; justify-content: center; }
   .hero-image img { height: 280px; }
   .small-image { display: none; }
-  .image-badge.est { top: -10px; right: -5px; }
+  .image-badge-est { top: -10px; right: -5px; }
   .event-content { padding: 35px 25px; }
+  .event-image-wrap { min-height: 200px; }
   .initiatives-grid { grid-template-columns: 1fr; }
+  .about-image { order: 2; }
+  .about-content { order: 1; }
 }
 </style>

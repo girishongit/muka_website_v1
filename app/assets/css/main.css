@@ -28,15 +28,15 @@
 
 html { scroll-behavior: smooth; }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 10px; }
+/* Custom Scrollbar — thin red */
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--cream); }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--gold) 0%, var(--primary-red) 100%);
-  border-radius: 5px;
+  background: var(--primary-red);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--gold-dark) 0%, var(--primary-red-dark) 100%);
+  background: var(--primary-red-dark);
 }
 
 body {
