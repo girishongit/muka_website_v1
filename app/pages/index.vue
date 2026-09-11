@@ -88,11 +88,11 @@
         </div>
 
         <!-- Carousel wrapper -->
-        <div class="events-carousel">
+        <div class="events-carousel" @touchstart.passive="onTouchStart" @touchend.passive="onTouchEnd">
           <div
             v-for="(event, i) in carouselEvents"
             :key="event.id"
-            class="event-card animate-observe"
+            class="event-card"
             :class="[event.theme, { active: currentSlide === i }]"
           >
             <div class="event-content">
@@ -123,10 +123,6 @@
               @click="goToSlide(i)"
             ></button>
           </div>
-
-          <!-- Prev / Next -->
-          <button class="carousel-btn carousel-prev" aria-label="Previous event" @click="prevSlide">‹</button>
-          <button class="carousel-btn carousel-next" aria-label="Next event" @click="nextSlide">›</button>
         </div>
       </div>
     </section>
@@ -236,6 +232,14 @@ function startAutoPlay() {
   autoPlayTimer = setInterval(() => { currentSlide.value = (currentSlide.value + 1) % carouselEvents.length }, 5000)
 }
 function resetAutoPlay() { clearInterval(autoPlayTimer); startAutoPlay() }
+
+// Touch swipe support
+let touchStartX = 0
+function onTouchStart(e) { touchStartX = e.touches[0].clientX }
+function onTouchEnd(e) {
+  const dx = e.changedTouches[0].clientX - touchStartX
+  if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide() }
+}
 
 // ─── Intersection Observer for scroll animations
 onMounted(() => {
@@ -481,6 +485,7 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 
 .events-carousel {
   position: relative;
+  /* Reserve space equal to tallest card so dots don't jump */
 }
 
 /* All cards stacked; only active is shown */
@@ -490,6 +495,7 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(196, 30, 58, 0.2);
+  min-height: 420px;
 }
 .event-card.active { display: grid; }
 
@@ -518,6 +524,9 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 .event-content {
   padding: 60px;
   color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .event-tag {
   display: inline-flex;
@@ -547,7 +556,7 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 .event-image-wrap {
   position: relative;
   overflow: hidden;
-  min-height: 300px;
+  min-height: 420px;
 }
 .event-image-overlay {
   position: absolute;
@@ -582,30 +591,6 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   padding: 0;
 }
 .carousel-dot.active { background: var(--primary-red); }
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.9);
-  border: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  color: var(--text-dark);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-.carousel-btn:hover { background: var(--white); }
-.carousel-prev { left: -22px; }
-.carousel-next { right: -22px; }
 
 /* ─── Initiatives ─────────────────────────────────────────── */
 .initiatives-section { background: var(--cream-dark); }
@@ -657,8 +642,6 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   .hero-image img { height: 400px; }
   .about-image img { height: 320px; }
   .about-badge { bottom: -10px; right: 10px; }
-  .carousel-prev { left: 5px; }
-  .carousel-next { right: 5px; }
 }
 @media (max-width: 768px) {
   .hero { padding: 40px 0 70px; }
@@ -670,10 +653,10 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   .small-image { display: none; }
   .image-badge-est { top: -10px; right: -5px; }
   .event-content { padding: 35px 25px; }
-  .event-image-wrap { min-height: 200px; }
+  .event-card { min-height: auto; }
+  .event-image-wrap { min-height: 220px; }
   .initiatives-grid { grid-template-columns: 1fr; }
   .about-image { order: 2; }
   .about-content { order: 1; }
-  .carousel-btn { display: none; }
 }
 </style>
