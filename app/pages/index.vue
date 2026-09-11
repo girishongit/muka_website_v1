@@ -495,7 +495,7 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(196, 30, 58, 0.2);
-  min-height: 420px;
+  height: 440px;
 }
 .event-card.active { display: grid; }
 
@@ -505,21 +505,21 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   box-shadow: 0 10px 40px rgba(196, 30, 58, 0.2);
 }
 .event-card.theme-red .event-image-overlay {
-  background: linear-gradient(to right, var(--primary-red) 0%, transparent 60%);
+  background: linear-gradient(to right, var(--primary-red) 0%, transparent 65%);
 }
 .event-card.theme-red .btn-white { color: var(--primary-red); }
 
-/* Gold theme */
+/* Gold theme — lighter base so text reads well, wider overlay for seamless blend */
 .event-card.theme-gold {
-  background: linear-gradient(135deg, var(--gold-dark) 0%, #B8860B 100%);
-  box-shadow: 0 10px 40px rgba(212, 167, 59, 0.25);
+  background: linear-gradient(135deg, #D4A017 0%, #C8940A 100%);
+  box-shadow: 0 10px 40px rgba(196, 148, 10, 0.25);
 }
 .event-card.theme-gold .event-image-overlay {
-  background: linear-gradient(to right, #B8860B 0%, transparent 60%);
+  background: linear-gradient(to right, #C8940A 0%, rgba(200, 148, 10, 0.7) 45%, transparent 75%);
 }
 .event-card.theme-gold .event-tag { background: rgba(255,255,255,0.2); }
-.event-card.theme-gold .event-kannada { color: rgba(255,255,255,0.9); }
-.event-card.theme-gold .btn-white { color: var(--gold-dark); }
+.event-card.theme-gold .event-kannada { color: rgba(255,255,255,0.95); }
+.event-card.theme-gold .btn-white { color: #8B6300; }
 
 .event-content {
   padding: 60px;
@@ -527,9 +527,11 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
 .event-tag {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   gap: 8px;
   background: rgba(255,255,255,0.15);
@@ -552,11 +554,12 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 .event-kannada { font-size: 26px; color: var(--gold); margin-bottom: 25px; display: block; }
 .event-content p { opacity: 0.9; margin-bottom: 35px; font-size: 16px; line-height: 1.8; }
 
-/* Event image with left-edge gradient overlay */
+/* Event image — fills fixed card height */
 .event-image-wrap {
   position: relative;
   overflow: hidden;
-  min-height: 420px;
+  height: 100%;
+  min-height: 440px;
 }
 .event-image-overlay {
   position: absolute;
@@ -642,6 +645,9 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   .hero-image img { height: 400px; }
   .about-image img { height: 320px; }
   .about-badge { bottom: -10px; right: 10px; }
+  /* When card stacks to single column, release fixed height */
+  .event-card { height: auto; }
+  .event-image-wrap { height: 280px; min-height: unset; }
 }
 @media (max-width: 768px) {
   .hero { padding: 40px 0 70px; }
@@ -653,8 +659,8 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   .small-image { display: none; }
   .image-badge-est { top: -10px; right: -5px; }
   .event-content { padding: 35px 25px; }
-  .event-card { min-height: auto; }
-  .event-image-wrap { min-height: 220px; }
+  .event-card { height: auto; }
+  .event-image-wrap { min-height: 240px; height: auto; }
   .initiatives-grid { grid-template-columns: 1fr; }
   .about-image { order: 2; }
   .about-content { order: 1; }
