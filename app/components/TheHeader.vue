@@ -33,12 +33,7 @@
           </div>
         </div>
         <div class="nav-item">
-          <span class="nav-link">Initiatives <i class="chevron">›</i></span>
-          <div class="dropdown">
-            <NuxtLink to="/initiatives/karnataka-cultural" @click="closeMenu">Karnataka Cultural</NuxtLink>
-            <NuxtLink to="/initiatives/jnana-deepa" @click="closeMenu">Jnana Deepa</NuxtLink>
-            <NuxtLink to="/initiatives/kannada-kali" @click="closeMenu">Kannada Kali</NuxtLink>
-          </div>
+          <NuxtLink to="/initiatives/kannada-kali" class="nav-link nav-direct" @click="closeMenu">Kannada Kali</NuxtLink>
         </div>
         <div class="nav-item">
           <span class="nav-link">Membership <i class="chevron">›</i></span>
@@ -164,6 +159,11 @@ onMounted(() => {
   font-family: 'Manrope', sans-serif;
 }
 .nav-link:hover { color: var(--primary-red); }
+.nav-direct {
+  text-decoration: none;
+  cursor: pointer;
+}
+.nav-direct.router-link-active { color: var(--primary-red); }
 .chevron {
   font-style: normal;
   font-size: 12px;

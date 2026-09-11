@@ -54,45 +54,25 @@
           <div class="value-card animate-observe">
             <div class="value-icon">❤️</div>
             <h4>Community First</h4>
-            <p>We prioritize the well-being and growth of our community members above all else.</p>
+            <p>We prioritize the well-being and growth of every member, fostering a sense of belonging far from home.</p>
           </div>
           <div class="value-card animate-observe delay-1">
             <div class="value-icon">🏛️</div>
             <h4>Cultural Heritage</h4>
-            <p>We are committed to preserving and promoting Kannada culture and traditions.</p>
+            <p>We preserve and promote the richness of Kannada language, arts, and traditions for generations to come.</p>
           </div>
           <div class="value-card animate-observe delay-2">
             <div class="value-icon">🤝</div>
             <h4>Mutual Support</h4>
-            <p>We believe in helping each other through challenges and celebrating successes together.</p>
+            <p>We stand together through challenges and celebrate milestones as one family, lending a helping hand always.</p>
           </div>
           <div class="value-card animate-observe">
-            <div class="value-icon">💡</div>
-            <h4>Innovation</h4>
-            <p>We embrace new ideas while staying rooted in our traditions.</p>
-          </div>
-          <div class="value-card animate-observe delay-1">
             <div class="value-icon">👥</div>
-            <h4>Inclusivity</h4>
-            <p>We welcome all who share our love for Kannada language and culture.</p>
-          </div>
-          <div class="value-card animate-observe delay-2">
-            <div class="value-icon">⭐</div>
-            <h4>Excellence</h4>
-            <p>We strive for excellence in everything we do for our community.</p>
+            <h4>Inclusive Spirit</h4>
+            <p>We welcome everyone who shares a love for Kannada culture — regardless of background or generation.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Quote Section -->
-    <section class="quote-section">
-      <div class="section-container">
-        <div class="quote-inner animate-observe">
-          <div class="quote-icon">🎭</div>
-          <p class="quote-kannada kannada-text">"ತನು ಕನ್ನಡ, ಮನ ಕನ್ನಡ, ನಡೆ ಕನ್ನಡ, ನುಡಿ ಕನ್ನಡ"</p>
-          <p class="quote-english">Body is Kannada, Mind is Kannada, Walk is Kannada, Speech is Kannada</p>
-        </div>
+        <p class="values-kuvempu kannada-text animate-observe">"ತನು ಕನ್ನಡ, ಮನ ಕನ್ನಡ, ನಡೆ ಕನ್ನಡ, ನುಡಿ ಕನ್ನಡ" — ಕುವೆಂಪು</p>
       </div>
     </section>
   </div>
@@ -230,7 +210,7 @@ onMounted(() => {
 .values-section { background: var(--cream-dark); }
 .values-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
 .value-card {
@@ -267,27 +247,13 @@ onMounted(() => {
   line-height: 1.6;
   margin-bottom: 0;
 }
-
-/* Quote section */
-.quote-section {
-  background: var(--primary-red);
-  color: var(--white);
-  padding: 100px 0;
+.values-kuvempu {
   text-align: center;
-}
-.quote-inner { max-width: 700px; margin: 0 auto; }
-.quote-icon { font-size: 48px; margin-bottom: 30px; }
-.quote-kannada {
-  font-size: 28px;
-  margin-bottom: 15px;
-  color: var(--white);
-  line-height: 1.6;
-}
-.quote-english {
-  font-size: 16px;
-  opacity: 0.8;
-  color: var(--white);
-  margin-bottom: 0;
+  margin-top: 40px;
+  color: var(--primary-red);
+  font-size: 18px;
+  line-height: 1.7;
+  opacity: 0.85;
 }
 
 /* Responsive */
@@ -301,6 +267,6 @@ onMounted(() => {
   .values-grid { grid-template-columns: 1fr; }
   .about-badge { bottom: -15px; right: 15px; padding: 18px 25px; }
   .about-badge .number { font-size: 32px; }
-  .quote-kannada { font-size: 20px; }
+  .values-kuvempu { font-size: 15px; }
 }
 </style>

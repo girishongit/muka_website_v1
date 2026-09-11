@@ -87,24 +87,46 @@
           </h2>
         </div>
 
-        <div class="event-card animate-observe">
-          <div class="event-content">
-            <span class="event-tag">📅 Featured Event</span>
-            <h3>UTSAVA 2025</h3>
-            <p class="event-kannada kannada-text">"ಉತ್ಸವ ೨೦೨೫"</p>
-            <p>Our flagship annual cultural festival celebrating Karnataka's rich heritage through music, dance, food, and community bonding.</p>
-            <NuxtLink to="/events/utsava-2025" class="btn btn-white">
-              Learn More <span aria-hidden="true">→</span>
-            </NuxtLink>
+        <!-- Carousel wrapper -->
+        <div class="events-carousel">
+          <div
+            v-for="(event, i) in carouselEvents"
+            :key="event.id"
+            class="event-card animate-observe"
+            :class="[event.theme, { active: currentSlide === i }]"
+          >
+            <div class="event-content">
+              <span class="event-tag">{{ event.tag }}</span>
+              <h3>{{ event.title }}</h3>
+              <p class="event-kannada kannada-text">{{ event.titleKn }}</p>
+              <p>{{ event.desc }}</p>
+              <NuxtLink :to="event.link" class="btn btn-white">
+                Learn More <span aria-hidden="true">→</span>
+              </NuxtLink>
+            </div>
+            <div class="event-image-wrap">
+              <div class="event-image-overlay" aria-hidden="true"></div>
+              <img :src="event.img" :alt="event.title" />
+            </div>
           </div>
-          <div class="event-image-wrap">
-            <!-- Crimson-to-transparent gradient overlay on left side of image -->
-            <div class="event-image-overlay" aria-hidden="true"></div>
-            <img
-              src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80"
-              alt="UTSAVA 2025 Cultural Celebration"
-            />
+
+          <!-- Dot indicators -->
+          <div class="carousel-dots" role="tablist" aria-label="Event slides">
+            <button
+              v-for="(_, i) in carouselEvents"
+              :key="i"
+              class="carousel-dot"
+              :class="{ active: currentSlide === i }"
+              :aria-label="`Show event ${i + 1}`"
+              :aria-selected="String(currentSlide === i)"
+              role="tab"
+              @click="goToSlide(i)"
+            ></button>
           </div>
+
+          <!-- Prev / Next -->
+          <button class="carousel-btn carousel-prev" aria-label="Previous event" @click="prevSlide">‹</button>
+          <button class="carousel-btn carousel-next" aria-label="Next event" @click="nextSlide">›</button>
         </div>
       </div>
     </section>
@@ -169,7 +191,53 @@ useSeoMeta({
   description: 'A vibrant community of Kannadigas in Munich celebrating language, culture, and belonging.'
 })
 
-// Intersection Observer for scroll animations
+// ─── Events carousel ─────────────────────────────────────────
+const carouselEvents = [
+  {
+    id: 1,
+    theme: 'theme-red',
+    tag: '📅 Featured Event',
+    title: 'UTSAVA 2025',
+    titleKn: '"ಉತ್ಸವ ೨೦೨೫"',
+    desc: 'Our flagship annual cultural festival celebrating Karnataka\'s rich heritage through music, dance, food, and community bonding.',
+    link: '/events/utsava-2025',
+    img: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80'
+  },
+  {
+    id: 2,
+    theme: 'theme-gold',
+    tag: '🎉 Annual Celebration',
+    title: 'Kannada Rajyotsava',
+    titleKn: '"ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ"',
+    desc: 'Join us on November 1st to celebrate Karnataka\'s state formation day with cultural performances, traditional cuisine, and community pride.',
+    link: '/events/utsava-2025',
+    img: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=800&q=80'
+  },
+  {
+    id: 3,
+    theme: 'theme-red',
+    tag: '⚽ Community Sports',
+    title: 'Sporting Kannadigaru',
+    titleKn: '"ಕ್ರೀಡಾ ಕನ್ನಡಿಗರು"',
+    desc: 'A day of friendly competition, team spirit, and cultural bonding. Cricket, football, and traditional games for all age groups.',
+    link: '/events/utsava-2025',
+    img: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80'
+  }
+]
+
+const currentSlide = ref(0)
+let autoPlayTimer = null
+
+function goToSlide(i) { currentSlide.value = i; resetAutoPlay() }
+function nextSlide() { currentSlide.value = (currentSlide.value + 1) % carouselEvents.length; resetAutoPlay() }
+function prevSlide() { currentSlide.value = (currentSlide.value - 1 + carouselEvents.length) % carouselEvents.length; resetAutoPlay() }
+
+function startAutoPlay() {
+  autoPlayTimer = setInterval(() => { currentSlide.value = (currentSlide.value + 1) % carouselEvents.length }, 5000)
+}
+function resetAutoPlay() { clearInterval(autoPlayTimer); startAutoPlay() }
+
+// ─── Intersection Observer for scroll animations
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -181,7 +249,10 @@ onMounted(() => {
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' })
 
   document.querySelectorAll('.animate-observe').forEach(el => observer.observe(el))
+  startAutoPlay()
 })
+
+onUnmounted(() => { clearInterval(autoPlayTimer) })
 </script>
 
 <style scoped>
@@ -407,14 +478,43 @@ onMounted(() => {
 
 /* ─── Events ─────────────────────────────────────────────── */
 .events-section { background: var(--cream); }
+
+.events-carousel {
+  position: relative;
+}
+
+/* All cards stacked; only active is shown */
 .event-card {
-  display: grid;
+  display: none;
   grid-template-columns: 1fr 1fr;
-  background: var(--primary-red);
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(196, 30, 58, 0.2);
 }
+.event-card.active { display: grid; }
+
+/* Red theme (default) */
+.event-card.theme-red {
+  background: var(--primary-red);
+  box-shadow: 0 10px 40px rgba(196, 30, 58, 0.2);
+}
+.event-card.theme-red .event-image-overlay {
+  background: linear-gradient(to right, var(--primary-red) 0%, transparent 60%);
+}
+.event-card.theme-red .btn-white { color: var(--primary-red); }
+
+/* Gold theme */
+.event-card.theme-gold {
+  background: linear-gradient(135deg, var(--gold-dark) 0%, #B8860B 100%);
+  box-shadow: 0 10px 40px rgba(212, 167, 59, 0.25);
+}
+.event-card.theme-gold .event-image-overlay {
+  background: linear-gradient(to right, #B8860B 0%, transparent 60%);
+}
+.event-card.theme-gold .event-tag { background: rgba(255,255,255,0.2); }
+.event-card.theme-gold .event-kannada { color: rgba(255,255,255,0.9); }
+.event-card.theme-gold .btn-white { color: var(--gold-dark); }
+
 .event-content {
   padding: 60px;
   color: var(--white);
@@ -443,7 +543,7 @@ onMounted(() => {
 .event-kannada { font-size: 26px; color: var(--gold); margin-bottom: 25px; display: block; }
 .event-content p { opacity: 0.9; margin-bottom: 35px; font-size: 16px; line-height: 1.8; }
 
-/* Event image with left-edge crimson gradient overlay */
+/* Event image with left-edge gradient overlay */
 .event-image-wrap {
   position: relative;
   overflow: hidden;
@@ -452,7 +552,6 @@ onMounted(() => {
 .event-image-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--primary-red) 0%, transparent 60%);
   z-index: 1;
   pointer-events: none;
 }
@@ -464,6 +563,49 @@ onMounted(() => {
   position: absolute;
   inset: 0;
 }
+
+/* Carousel controls */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-red);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s;
+  padding: 0;
+}
+.carousel-dot.active { background: var(--primary-red); }
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.9);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-dark);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.carousel-btn:hover { background: var(--white); }
+.carousel-prev { left: -22px; }
+.carousel-next { right: -22px; }
 
 /* ─── Initiatives ─────────────────────────────────────────── */
 .initiatives-section { background: var(--cream-dark); }
@@ -515,6 +657,8 @@ onMounted(() => {
   .hero-image img { height: 400px; }
   .about-image img { height: 320px; }
   .about-badge { bottom: -10px; right: 10px; }
+  .carousel-prev { left: 5px; }
+  .carousel-next { right: 5px; }
 }
 @media (max-width: 768px) {
   .hero { padding: 40px 0 70px; }
@@ -530,5 +674,6 @@ onMounted(() => {
   .initiatives-grid { grid-template-columns: 1fr; }
   .about-image { order: 2; }
   .about-content { order: 1; }
+  .carousel-btn { display: none; }
 }
 </style>

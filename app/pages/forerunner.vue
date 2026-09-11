@@ -5,7 +5,7 @@
         <span class="tag animate-item">Our Leaders</span>
         <h1 class="animate-item delay-1">Forerunners</h1>
         <p class="kannada-text animate-item delay-2">ನಮ್ಮ ಮುನ್ನುಡಿಗಾರರು</p>
-        <p class="animate-item delay-3">Meet the visionary leaders who laid the foundation of our community.</p>
+        <p class="animate-item delay-3">Our elected executive committee members — chosen by fellow members to serve and represent the community.</p>
       </div>
     </section>
 
@@ -13,10 +13,10 @@
     <section class="section founders-section">
       <div class="section-container">
         <div class="founders-intro animate-observe">
-          <span class="tag">Our Founding Story</span>
-          <h2>Built with Vision,<br><span class="red">Driven by Passion</span></h2>
-          <p>One of our visionary founders established Munich Kannadigaru in 2019 with a dream to unite Kannadigas in Munich. They played a crucial role in shaping the community's vision and establishing its core values and principles.</p>
-          <p>Instrumental in organizing the first community events and building the initial member network, our founders contributed significantly to the cultural and social framework of our community.</p>
+          <span class="tag">About Forerunners</span>
+          <h2>Elected by Members,<br><span class="red">Serving the Community</span></h2>
+          <p>The executive committee of Munich Kannadigaru is elected democratically by the community's general membership. Forerunners are always an odd number — five or seven — ensuring decisions are always decisive and fair.</p>
+          <p>Each term, they take on the responsibility of organising events, managing finances, liaising with members, and steering the community's vision. Their mandate comes directly from the community they serve.</p>
         </div>
       </div>
     </section>
@@ -74,6 +74,16 @@
               <div class="member-role">Treasurer</div>
               <h3>ಖಜಾಂಚಿ</h3>
               <p>Overseeing financial matters and ensuring transparent management of community resources.</p>
+            </div>
+          </div>
+          <div class="committee-card animate-observe delay-1">
+            <div class="member-photo">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" alt="Cultural Coordinator" />
+            </div>
+            <div class="member-info">
+              <div class="member-role">Cultural Coordinator</div>
+              <h3>ಸಾಂಸ್ಕೃತಿಕ ಸಮನ್ವಯಕಾರರು</h3>
+              <p>Planning and organising cultural programs, festivals, and community events throughout the year.</p>
             </div>
           </div>
         </div>
