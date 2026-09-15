@@ -4,9 +4,9 @@
     "title": "UTSAVA",
     "kannadaTitle": "ಉತ್ಸವ",
     "navLabel": "UTSAVA",
-    "date": "2025-05-15",
-    "time": "10:00 AM – 8:00 PM",
-    "venue": "Munich Community Center",
+    "date": "",
+    "time": "",
+    "venue": "",
     "heroImage": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
     "galleryImages": [
       "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
@@ -22,29 +22,7 @@
     "pinToTop": false
   },
   {
-    "slug": "utsava-2025",
-    "title": "UTSAVA 2025",
-    "kannadaTitle": "ಉತ್ಸವ ೨೦೨೫",
-    "navLabel": "UTSAVA 2025",
-    "date": "2025-05-15",
-    "time": "10:00 AM – 8:00 PM",
-    "venue": "Munich Community Center",
-    "heroImage": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
-    "galleryImages": [
-      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80"
-    ],
-    "contentHtml": "<p>UTSAVA is our annual flagship event that brings together the Kannada-speaking community in Munich for a day of celebration, culture, and connection.</p><p>Experience the vibrant traditions of Karnataka through classical dance performances, melodious Kannada songs, traditional drama, and much more.</p><p>Indulge in authentic Karnataka cuisine, participate in fun activities, and create lasting memories with your community.</p>",
-    "registrationStatus": "closed",
-    "past": true,
-    "googleFormUrl": "",
-    "tag": "Featured Event",
-    "featured": true,
-    "navOrder": 0,
-    "pinToTop": false
-  },
-  {
-    "slug": "ugadi-2026",
+    "slug": "ugadi",
     "title": "Ugadi 2026",
     "kannadaTitle": "ಯುಗಾದಿ ೨೦೨೬",
     "navLabel": "Ugadi 2026",
@@ -66,7 +44,7 @@
     "pinToTop": false
   },
   {
-    "slug": "food-festival-2026",
+    "slug": "foodfestival",
     "title": "Karnataka Food Festival 2026",
     "kannadaTitle": "ಕರ್ನಾಟಕ ಆಹಾರ ಉತ್ಸವ",
     "navLabel": "Food Festival 2026",
