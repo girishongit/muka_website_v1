@@ -90,7 +90,7 @@
 
     <!-- Registration Dialog -->
     <Teleport to="body">
-      <div class="dialog-overlay" :class="{ active: showDialog }">
+      <div class="dialog-overlay" :class="{ active: showDialog }" @click.self="showDialog = false">
         <div class="dialog" role="dialog" aria-modal="true" aria-label="Register for UTSAVA">
           <div class="dialog-header">
             <div>
@@ -246,7 +246,7 @@ const DEFAULTS = {
     'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80',
   ],
   contentHtml: '<p>UTSAVA is our annual flagship event that brings together the Kannada-speaking community in Munich for a day of celebration, culture, and connection.</p><p>Experience the vibrant traditions of Karnataka through classical dance performances, melodious Kannada songs, traditional drama, and much more.</p>',
-  registrationStatus: 'closed',
+  registrationStatus: 'open',
   past: false,
 }
 
@@ -374,7 +374,10 @@ function updateCountdown() {
 }
 
 // ── Watch dialog open → fetch tickets ────────────────────────────────────────
-watch(showDialog, (open) => { if (open) fetchTickets() })
+watch(showDialog, (open) => {
+  if (open) fetchTickets()
+  else turnstileToken.value = ''
+})
 
 let escHandler
 let timer

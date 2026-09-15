@@ -1,0 +1,111 @@
+[
+  {
+    "slug": "utsava",
+    "title": "UTSAVA",
+    "kannadaTitle": "ಉತ್ಸವ",
+    "navLabel": "UTSAVA",
+    "date": "2025-05-15",
+    "time": "10:00 AM – 8:00 PM",
+    "venue": "Munich Community Center",
+    "heroImage": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80"
+    ],
+    "contentHtml": "<p>UTSAVA is our annual flagship event that brings together the Kannada-speaking community in Munich for a day of celebration, culture, and connection.</p><p>Experience the vibrant traditions of Karnataka through classical dance performances, melodious Kannada songs, traditional drama, and much more.</p><p>Indulge in authentic Karnataka cuisine, participate in fun activities, and create lasting memories with your community.</p>",
+    "registrationStatus": "open",
+    "past": false,
+    "googleFormUrl": "",
+    "tag": "Featured Event",
+    "featured": true,
+    "navOrder": 0,
+    "pinToTop": false
+  },
+  {
+    "slug": "utsava-2025",
+    "title": "UTSAVA 2025",
+    "kannadaTitle": "ಉತ್ಸವ ೨೦೨೫",
+    "navLabel": "UTSAVA 2025",
+    "date": "2025-05-15",
+    "time": "10:00 AM – 8:00 PM",
+    "venue": "Munich Community Center",
+    "heroImage": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80"
+    ],
+    "contentHtml": "<p>UTSAVA is our annual flagship event that brings together the Kannada-speaking community in Munich for a day of celebration, culture, and connection.</p><p>Experience the vibrant traditions of Karnataka through classical dance performances, melodious Kannada songs, traditional drama, and much more.</p><p>Indulge in authentic Karnataka cuisine, participate in fun activities, and create lasting memories with your community.</p>",
+    "registrationStatus": "closed",
+    "past": true,
+    "googleFormUrl": "",
+    "tag": "Featured Event",
+    "featured": true,
+    "navOrder": 0,
+    "pinToTop": false
+  },
+  {
+    "slug": "ugadi-2026",
+    "title": "Ugadi 2026",
+    "kannadaTitle": "ಯುಗಾದಿ ೨೦೨೬",
+    "navLabel": "Ugadi 2026",
+    "date": "2026-03-30",
+    "time": "11:00 AM – 7:00 PM",
+    "venue": "Munich Community Hall",
+    "heroImage": "https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=600&q=80",
+      "https://images.unsplash.com/photo-1541753866388-0b3c701627d3?w=600&q=80"
+    ],
+    "contentHtml": "<p>Ugadi marks the beginning of the new year in the Karnataka lunar calendar — a time for fresh starts, reflection, and togetherness. Join Munich Kannadigaru for an evening of traditional rituals, classical performances, and the iconic Bevu-Bella (neem and jaggery) ceremony.</p><p>The event features cultural performances by community members, traditional Karnataka food, and activities for children.</p>",
+    "registrationStatus": "coming_soon",
+    "past": false,
+    "googleFormUrl": "",
+    "tag": "New Year Festival",
+    "featured": false,
+    "navOrder": 1,
+    "pinToTop": false
+  },
+  {
+    "slug": "food-festival-2026",
+    "title": "Karnataka Food Festival 2026",
+    "kannadaTitle": "ಕರ್ನಾಟಕ ಆಹಾರ ಉತ್ಸವ",
+    "navLabel": "Food Festival 2026",
+    "date": "2026-06-14",
+    "time": "12:00 PM – 8:00 PM",
+    "venue": "Munich City Garden",
+    "heroImage": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80"
+    ],
+    "contentHtml": "<p>A celebration of Karnataka's rich culinary tradition — from Bisi Bele Bath and Masala Dosa to Mysore Pak and Filter Coffee. Experience the diversity of Karnataka cuisine prepared by families from across the community.</p><p>Cooking demonstrations, food stalls, and cultural performances make this a full-day family event.</p>",
+    "registrationStatus": "coming_soon",
+    "past": false,
+    "googleFormUrl": "",
+    "tag": "Food & Culture",
+    "featured": false,
+    "navOrder": 2,
+    "pinToTop": false
+  },
+  {
+    "slug": "ganesha-chaturthi-2026",
+    "title": "Ganesha Chaturthi 2026",
+    "kannadaTitle": "ಗಣೇಶ ಚತುರ್ಥಿ ೨೦೨೬",
+    "navLabel": "Ganesha Chaturthi",
+    "date": "2026-08-23",
+    "time": "10:00 AM – 6:00 PM",
+    "venue": "Munich Community Hall",
+    "heroImage": "https://images.unsplash.com/photo-1567450297892-c9b3c1cb4c85?w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1567450297892-c9b3c1cb4c85?w=600&q=80"
+    ],
+    "contentHtml": "<p>Join Munich Kannadigaru in celebrating the beloved festival of Ganesha Chaturthi — welcoming Lord Ganesha with traditional puja, bhajans, and prasad.</p><p>The event includes community prayers, cultural programmes, and a festive meal. All are welcome.</p>",
+    "registrationStatus": "coming_soon",
+    "past": false,
+    "googleFormUrl": "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true",
+    "tag": "Religious Festival",
+    "featured": false,
+    "navOrder": 3,
+    "pinToTop": false
+  }
+]
