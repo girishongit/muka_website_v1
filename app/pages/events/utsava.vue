@@ -91,27 +91,34 @@
     <!-- Registration Dialog -->
     <Teleport to="body">
       <div class="dialog-overlay" :class="{ active: showDialog }">
-        <div class="dialog" role="dialog" aria-modal="true" aria-label="Register for UTSAVA 2025">
+        <div class="dialog" role="dialog" aria-modal="true" aria-label="Register for UTSAVA">
           <div class="dialog-header">
             <div>
-              <h3>Register for UTSAVA 2025</h3>
-              <p class="dialog-kannada kannada-text">ಉತ್ಸವ ೨೦೨೫ ಗೆ ನೋಂದಣಿ</p>
+              <h3>Register for UTSAVA</h3>
+              <p class="dialog-kannada kannada-text">ಉತ್ಸವಕ್ಕೆ ನೋಂದಣಿ</p>
             </div>
             <button class="dialog-close" @click="showDialog = false" aria-label="Close dialog">✕</button>
           </div>
           <div class="dialog-body">
-            <div v-if="formSuccess" class="alert alert-success">Thank you for registering! We look forward to seeing you at UTSAVA 2025.</div>
-            <div v-if="formError" class="alert alert-error">There was an error. Please try again or email us directly.</div>
+            <div v-if="formSuccess" class="alert alert-success">
+              Thank you for registering! We'll be in touch with more details soon.
+            </div>
+            <div v-if="formError" class="alert alert-error">
+              There was an error. Please try again or email us directly.
+            </div>
 
             <form v-if="!formSuccess" @submit.prevent="submitForm">
+
+              <!-- Section 1: Personal Details -->
+              <p class="form-section-label">Personal Details</p>
               <div class="form-row">
                 <div class="form-group">
                   <label>First Name <span class="required">*</span></label>
-                  <input type="text" v-model="form.firstName" required placeholder="Enter your first name" />
+                  <input type="text" v-model="form.firstName" required placeholder="First name" />
                 </div>
                 <div class="form-group">
                   <label>Last Name <span class="required">*</span></label>
-                  <input type="text" v-model="form.lastName" required placeholder="Enter your last name" />
+                  <input type="text" v-model="form.lastName" required placeholder="Last name" />
                 </div>
               </div>
               <div class="form-row">
@@ -124,34 +131,67 @@
                   <input type="tel" v-model="form.phone" required placeholder="+49 123 456 789" />
                 </div>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Number of Adults <span class="required">*</span></label>
-                  <select v-model="form.adults" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5+">5+</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Number of Children</label>
-                  <select v-model="form.children">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4+">4+</option>
-                  </select>
-                </div>
-              </div>
+
+              <!-- Section 2: Membership -->
+              <p class="form-section-label">Membership</p>
               <div class="form-group">
-                <label>Dietary Requirements</label>
-                <input type="text" v-model="form.dietary" placeholder="Vegetarian, Vegan, Allergies, etc." />
+                <label>Are you a member of Munich Kannadigaru? <span class="required">*</span></label>
+                <div class="membership-toggle">
+                  <button
+                    type="button"
+                    class="toggle-pill"
+                    :class="{ active: form.isMember === true }"
+                    @click="setMembership(true)"
+                  >Yes, I'm a member</button>
+                  <button
+                    type="button"
+                    class="toggle-pill"
+                    :class="{ active: form.isMember === false }"
+                    @click="setMembership(false)"
+                  >No, I'm not a member</button>
+                </div>
               </div>
+              <div v-if="form.isMember === true" class="form-group">
+                <label>Membership ID <span class="required">*</span></label>
+                <input
+                  type="text"
+                  v-model="form.membershipId"
+                  required
+                  placeholder="e.g. MK-1234"
+                />
+              </div>
+
+              <!-- Section 3: Tickets -->
+              <template v-if="form.isMember !== null">
+                <p class="form-section-label">Tickets</p>
+                <div v-if="ticketsLoading" class="tickets-loading">Loading ticket options…</div>
+                <div v-else-if="ticketsError" class="alert alert-error">Could not load ticket options. Please close and try again.</div>
+                <template v-else-if="computedTickets.length">
+                  <div class="ticket-list">
+                    <div v-for="ticket in computedTickets" :key="ticket.id" class="ticket-row">
+                      <div class="ticket-info">
+                        <span class="ticket-label">{{ ticket.label }}</span>
+                        <span class="ticket-price">€{{ ticket.price }}</span>
+                      </div>
+                      <div class="ticket-stepper">
+                        <button type="button" class="stepper-btn" @click="stepQty(ticket.id, -1)">−</button>
+                        <span class="stepper-qty">{{ quantities[ticket.id] || 0 }}</span>
+                        <button type="button" class="stepper-btn" @click="stepQty(ticket.id, 1)">+</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ticket-total">
+                    Total: <strong>€{{ computedTotal }}</strong>
+                  </div>
+                </template>
+              </template>
+
               <NuxtTurnstile v-model="turnstileToken" class="form-turnstile" />
-              <button type="submit" class="btn btn-primary btn-full" :disabled="submitting || !turnstileToken">
+              <button
+                type="submit"
+                class="btn btn-primary btn-full"
+                :disabled="submitting || !canSubmit"
+              >
                 {{ submitting ? 'Submitting…' : 'Complete Registration' }}
               </button>
             </form>
@@ -336,6 +376,7 @@ function updateCountdown() {
 // ── Watch dialog open → fetch tickets ────────────────────────────────────────
 watch(showDialog, (open) => { if (open) fetchTickets() })
 
+let escHandler
 let timer
 onMounted(() => {
   updateCountdown()
@@ -345,9 +386,13 @@ onMounted(() => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target) } })
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' })
   document.querySelectorAll('.animate-observe').forEach(el => observer.observe(el))
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') showDialog.value = false })
+  escHandler = e => { if (e.key === 'Escape') showDialog.value = false }
+  document.addEventListener('keydown', escHandler)
 })
-onUnmounted(() => clearInterval(timer))
+onUnmounted(() => {
+  clearInterval(timer)
+  document.removeEventListener('keydown', escHandler)
+})
 </script>
 
 <style scoped>
@@ -619,5 +664,88 @@ onUnmounted(() => clearInterval(timer))
   .countdown-item { padding: 18px 20px; min-width: 70px; }
   .about-event-buttons { flex-direction: column; }
   .form-row { grid-template-columns: 1fr; }
+}
+
+/* Form section labels */
+.form-section-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-red);
+  margin: 24px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--cream);
+  font-family: 'Manrope', sans-serif;
+}
+.form-section-label:first-of-type { margin-top: 0; }
+
+/* Membership toggle pills */
+.membership-toggle {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.toggle-pill {
+  padding: 9px 20px;
+  border-radius: 50px;
+  border: 2px solid var(--cream);
+  background: var(--white);
+  color: var(--text-dark);
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-pill:hover { border-color: var(--primary-red); color: var(--primary-red); }
+.toggle-pill.active {
+  background: var(--primary-red);
+  border-color: var(--primary-red);
+  color: var(--white);
+}
+
+/* Ticket list */
+.ticket-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.ticket-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--cream);
+  border-radius: 12px;
+  gap: 12px;
+}
+.ticket-info { display: flex; flex-direction: column; gap: 2px; }
+.ticket-label { font-size: 15px; font-weight: 600; color: var(--text-dark); font-family: 'Manrope', sans-serif; }
+.ticket-price { font-size: 13px; color: var(--text-light); }
+.ticket-stepper { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.stepper-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--primary-red);
+  background: var(--white); color: var(--primary-red);
+  font-size: 18px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; line-height: 1;
+}
+.stepper-btn:hover { background: var(--primary-red); color: var(--white); }
+.stepper-qty {
+  min-width: 28px; text-align: center;
+  font-size: 17px; font-weight: 700;
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-dark);
+}
+.ticket-total {
+  text-align: right;
+  font-size: 16px;
+  color: var(--text-dark);
+  font-family: 'Manrope', sans-serif;
+  margin-bottom: 20px;
+}
+.ticket-total strong { color: var(--primary-red); font-size: 18px; }
+.tickets-loading {
+  font-size: 14px; color: var(--text-light);
+  padding: 16px 0; text-align: center;
+  font-family: 'Manrope', sans-serif;
 }
 </style>
