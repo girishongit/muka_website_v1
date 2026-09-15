@@ -8,5 +8,9 @@
     { "id": "adult",      "label": "Adult",                          "price": 22, "currency": "EUR" },
     { "id": "student",    "label": "Student",                        "price": 12, "currency": "EUR" },
     { "id": "family",     "label": "Family (2 adults + 2 children)", "price": 55, "currency": "EUR" }
-  ]
+  ],
+  "memberEligibility": {
+    "single_adult": ["adult_member"],
+    "family":       ["adult_member", "child_member"]
+  }
 }

@@ -111,15 +111,9 @@
 
               <!-- Section 1: Personal Details -->
               <p class="form-section-label">Personal Details</p>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>First Name <span class="required">*</span></label>
-                  <input type="text" v-model="form.firstName" required placeholder="First name" />
-                </div>
-                <div class="form-group">
-                  <label>Last Name <span class="required">*</span></label>
-                  <input type="text" v-model="form.lastName" required placeholder="Last name" />
-                </div>
+              <div class="form-group">
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" v-model="form.fullName" required placeholder="Your full name" />
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -153,12 +147,20 @@
               </div>
               <div v-if="form.isMember === true" class="form-group">
                 <label>Membership ID <span class="required">*</span></label>
-                <input
-                  type="text"
-                  v-model="form.membershipId"
-                  required
-                  placeholder="e.g. MK-1234"
-                />
+                <div class="membership-id-wrap">
+                  <input
+                    type="text"
+                    v-model="form.membershipId"
+                    placeholder="e.g. MK-1234"
+                    :class="{
+                      'input-valid':   membershipStatus === 'valid',
+                      'input-invalid': membershipStatus === 'invalid'
+                    }"
+                  />
+                  <span v-if="membershipStatus === 'checking'" class="member-hint member-hint--checking">Checking…</span>
+                  <span v-else-if="membershipStatus === 'valid'" class="member-hint member-hint--valid">✓ {{ membershipType === 'family' ? 'Family member' : 'Member' }}</span>
+                  <span v-else-if="membershipStatus === 'invalid'" class="member-hint member-hint--invalid">Membership ID not found</span>
+                </div>
               </div>
 
               <!-- Section 3: Tickets -->
@@ -253,8 +255,9 @@ const DEFAULTS = {
 const { liveData, loading } = useEventData('utsava', DEFAULTS)
 
 const { public: { apiBaseUrl } } = useRuntimeConfig()
-const registerUrl = `${apiBaseUrl.replace(/\/$/, '')}/utsava-register.php`
-const ticketsUrl  = `${apiBaseUrl.replace(/\/$/, '')}/utsava-tickets.php`
+const registerUrl  = `${apiBaseUrl.replace(/\/$/, '')}/utsava-register.php`
+const ticketsUrl   = `${apiBaseUrl.replace(/\/$/, '')}/utsava-tickets.php`
+const validateUrl  = `${apiBaseUrl.replace(/\/$/, '')}/validate-membership.php`
 
 // ── Dialog visibility ────────────────────────────────────────────────────────
 const showDialog  = ref(false)
@@ -265,9 +268,40 @@ const turnstileToken = ref('')
 
 // ── Personal details ─────────────────────────────────────────────────────────
 const form = reactive({
-  firstName: '', lastName: '', email: '', phone: '',
+  fullName: '', email: '', phone: '',
   isMember: null,   // null = unanswered, true/false after selection
   membershipId: '',
+})
+
+// ── Membership validation state ───────────────────────────────────────────────
+// null = not yet checked, 'checking', 'valid', 'invalid'
+const membershipStatus = ref(null)
+const membershipType   = ref(null)   // e.g. 'single_adult', 'family'
+const eligibleIds      = ref([])     // categoryIds allowed for this membership
+
+let validateTimer = null
+watch(() => form.membershipId, (id) => {
+  membershipStatus.value = null
+  membershipType.value   = null
+  eligibleIds.value      = []
+  clearTimeout(validateTimer)
+  if (!id.trim()) return
+  membershipStatus.value = 'checking'
+  validateTimer = setTimeout(async () => {
+    try {
+      const res = await $fetch(`${validateUrl}?id=${encodeURIComponent(id.trim())}`)
+      if (res.valid) {
+        membershipStatus.value = 'valid'
+        membershipType.value   = res.type
+        eligibleIds.value      = res.eligibleCategoryIds || []
+        quantities.value       = {}   // reset quantities when eligibility changes
+      } else {
+        membershipStatus.value = 'invalid'
+      }
+    } catch {
+      membershipStatus.value = 'invalid'
+    }
+  }, 600)
 })
 
 // ── Ticket state ─────────────────────────────────────────────────────────────
@@ -292,7 +326,11 @@ async function fetchTickets() {
 // ── Derived ticket state ──────────────────────────────────────────────────────
 const computedTickets = computed(() => {
   if (!ticketConfig.value || form.isMember === null) return []
-  return form.isMember ? ticketConfig.value.member : ticketConfig.value.nonMember
+  if (form.isMember) {
+    // Filter member tickets to only those eligible for this membership type
+    return ticketConfig.value.member.filter(t => eligibleIds.value.includes(t.id))
+  }
+  return ticketConfig.value.nonMember
 })
 
 const computedTotal = computed(() =>
@@ -308,15 +346,19 @@ const computedTicketPayload = computed(() =>
 const canSubmit = computed(() =>
   !!turnstileToken.value &&
   computedTicketPayload.value.length > 0 &&
-  form.firstName && form.lastName && form.email && form.phone &&
+  form.fullName && form.email && form.phone &&
   form.isMember !== null &&
-  (!form.isMember || form.membershipId.trim() !== '')
+  (!form.isMember || (form.membershipId.trim() !== '' && membershipStatus.value === 'valid'))
 )
 
 // ── Membership toggle ────────────────────────────────────────────────────────
 function setMembership(value) {
   form.isMember = value
-  quantities.value = {}   // reset quantities when membership status changes
+  form.membershipId = ''
+  membershipStatus.value = null
+  membershipType.value   = null
+  eligibleIds.value      = []
+  quantities.value = {}
 }
 
 // ── Quantity stepper ─────────────────────────────────────────────────────────
@@ -334,21 +376,24 @@ async function submitForm() {
     await $fetch(registerUrl, {
       method: 'POST',
       body: {
-        firstName:    form.firstName,
-        lastName:     form.lastName,
-        email:        form.email,
-        phone:        form.phone,
-        isMember:     form.isMember,
-        membershipId: form.membershipId,
-        tickets:      computedTicketPayload.value,
-        totalAmount:  computedTotal.value,
-        currency:     'EUR',
+        fullName:       form.fullName,
+        email:          form.email,
+        phone:          form.phone,
+        isMember:       form.isMember,
+        membershipId:   form.membershipId,
+        membershipType: membershipType.value,
+        tickets:        computedTicketPayload.value,
+        totalAmount:    computedTotal.value,
+        currency:       'EUR',
         turnstileToken: turnstileToken.value,
       }
     })
     formSuccess.value = true
     turnstileToken.value = ''
-    Object.assign(form, { firstName: '', lastName: '', email: '', phone: '', isMember: null, membershipId: '' })
+    Object.assign(form, { fullName: '', email: '', phone: '', isMember: null, membershipId: '' })
+    membershipStatus.value = null
+    membershipType.value   = null
+    eligibleIds.value      = []
     quantities.value = {}
   } catch {
     formError.value = true
@@ -751,4 +796,18 @@ onUnmounted(() => {
   padding: 16px 0; text-align: center;
   font-family: 'Manrope', sans-serif;
 }
+
+/* Membership ID field with validation indicator */
+.membership-id-wrap { display: flex; flex-direction: column; gap: 6px; }
+.membership-id-wrap input { width: 100%; }
+.input-valid  { border-color: #059669 !important; }
+.input-invalid { border-color: #dc2626 !important; }
+.member-hint {
+  font-size: 12px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+}
+.member-hint--checking { color: var(--text-light); }
+.member-hint--valid    { color: #059669; }
+.member-hint--invalid  { color: #dc2626; }
 </style>

@@ -5,10 +5,11 @@
  *
  * Expected JSON body:
  *   {
- *     "firstName": string, "lastName": string,
+ *     "fullName": string,
  *     "email": string, "phone": string,
  *     "isMember": bool,
  *     "membershipId": string,
+ *     "membershipType": string|null,
  *     "tickets": [{ "categoryId": string, "label": string, "quantity": int, "priceEach": float }],
  *     "totalAmount": float,
  *     "currency": string,
@@ -17,17 +18,17 @@
  *
  * ─── DB schema ───────────────────────────────────────────────────────────────
  * CREATE TABLE utsava_ticket_registrations (
- *   id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
- *   first_name     VARCHAR(80)  NOT NULL,
- *   last_name      VARCHAR(80)  NOT NULL,
- *   email          VARCHAR(200) NOT NULL,
- *   phone          VARCHAR(30)  NOT NULL DEFAULT '',
- *   is_member      TINYINT(1)   NOT NULL DEFAULT 0,
- *   membership_id  VARCHAR(50)  NOT NULL DEFAULT '',
- *   tickets_json   JSON         NOT NULL,
- *   total_amount   DECIMAL(8,2) NOT NULL DEFAULT 0,
- *   currency       VARCHAR(10)  NOT NULL DEFAULT 'EUR',
- *   created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
+ *   id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ *   full_name       VARCHAR(160) NOT NULL,
+ *   email           VARCHAR(200) NOT NULL,
+ *   phone           VARCHAR(30)  NOT NULL DEFAULT '',
+ *   is_member       TINYINT(1)   NOT NULL DEFAULT 0,
+ *   membership_id   VARCHAR(50)  NOT NULL DEFAULT '',
+ *   membership_type VARCHAR(50)  NOT NULL DEFAULT '',
+ *   tickets_json    JSON         NOT NULL,
+ *   total_amount    DECIMAL(8,2) NOT NULL DEFAULT 0,
+ *   currency        VARCHAR(10)  NOT NULL DEFAULT 'EUR',
+ *   created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
  * ─────────────────────────────────────────────────────────────────────────────
  */
@@ -46,20 +47,20 @@ if (!verifyTurnstile($body['turnstileToken'] ?? '')) {
 }
 
 // 2. Required personal fields
-$firstName = trim($body['firstName'] ?? '');
-$lastName  = trim($body['lastName']  ?? '');
-$email     = trim($body['email']     ?? '');
-$phone     = trim($body['phone']     ?? '');
+$fullName = trim($body['fullName'] ?? '');
+$email    = trim($body['email']   ?? '');
+$phone    = trim($body['phone']   ?? '');
 
-if (empty($firstName) || empty($lastName) || empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (empty($fullName) || empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(422);
-    echo json_encode(['error' => 'First name, last name, and a valid email are required.']);
+    echo json_encode(['error' => 'Full name and a valid email are required.']);
     exit;
 }
 
 // 3. Membership
-$isMember    = !empty($body['isMember']);
-$membershipId = trim($body['membershipId'] ?? '');
+$isMember       = !empty($body['isMember']);
+$membershipId   = trim($body['membershipId']   ?? '');
+$membershipType = substr(trim($body['membershipType'] ?? ''), 0, 50);
 
 if ($isMember && empty($membershipId)) {
     http_response_code(422);
@@ -113,20 +114,20 @@ try {
     $db   = (new Database())->getConnection();
     $stmt = $db->prepare(
         'INSERT INTO utsava_ticket_registrations
-           (first_name, last_name, email, phone, is_member, membership_id, tickets_json, total_amount, currency)
+           (full_name, email, phone, is_member, membership_id, membership_type, tickets_json, total_amount, currency)
          VALUES
-           (:first_name, :last_name, :email, :phone, :is_member, :membership_id, :tickets_json, :total_amount, :currency)'
+           (:full_name, :email, :phone, :is_member, :membership_id, :membership_type, :tickets_json, :total_amount, :currency)'
     );
     $stmt->execute([
-        ':first_name'    => $firstName,
-        ':last_name'     => $lastName,
-        ':email'         => $email,
-        ':phone'         => $phone,
-        ':is_member'     => $isMember ? 1 : 0,
-        ':membership_id' => $membershipId,
-        ':tickets_json'  => json_encode($tickets),
-        ':total_amount'  => round($serverTotal, 2),
-        ':currency'      => $currency,
+        ':full_name'       => $fullName,
+        ':email'           => $email,
+        ':phone'           => $phone,
+        ':is_member'       => $isMember ? 1 : 0,
+        ':membership_id'   => $membershipId,
+        ':membership_type' => $membershipType,
+        ':tickets_json'    => json_encode($tickets),
+        ':total_amount'    => round($serverTotal, 2),
+        ':currency'        => $currency,
     ]);
 
     echo json_encode(['success' => true]);
