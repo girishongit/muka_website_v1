@@ -1,4 +1,5 @@
 <?php
+$corsMethod = 'POST';
 require_once __DIR__ . '/../_cors.php';
 require_once __DIR__ . '/_auth.php';
 
@@ -32,6 +33,15 @@ foreach ($input as $key => $set) {
         $label = trim($row['label'] ?? '');
         if (!$id || !$label) continue;
         $nonMember[] = ['id' => $id, 'label' => $label, 'price' => max(0, (float)($row['price'] ?? 0)), 'currency' => substr(trim($row['currency'] ?? 'EUR'), 0, 10)];
+    }
+
+    $memberIds    = array_column($member, 'id');
+    $nonMemberIds = array_column($nonMember, 'id');
+    if (count($memberIds) !== count(array_unique($memberIds)) ||
+        count($nonMemberIds) !== count(array_unique($nonMemberIds))) {
+        http_response_code(422);
+        echo json_encode(['error' => "Duplicate ticket IDs in key: $key"]);
+        exit;
     }
 
     $clean[$key] = ['member' => $member, 'nonMember' => $nonMember];
