@@ -5,7 +5,7 @@
       <span>🎉 This event has concluded — thank you to everyone who joined us for UTSAVA 2025!</span>
     </div>
 
-    <section class="event-hero">
+    <section class="event-hero" :style="liveData.heroImage ? `--hero-bg: url('${liveData.heroImage}')` : ''">
       <div class="event-hero-container">
         <span class="tag event-tag-pill animate-item">📅 {{ liveData.tag }}</span>
         <h1 class="animate-item delay-1">{{ liveData.title }}</h1>
@@ -66,22 +66,26 @@
             </div>
           </div>
 
-          <!-- Image grid with loading skeleton -->
-          <div class="event-images-grid animate-observe delay-1">
+          <!-- Image gallery -->
+          <div class="event-images-wrap animate-observe delay-1">
             <template v-if="loading">
-              <div class="img-skeleton img-skeleton--main"></div>
-              <div class="img-skeleton img-skeleton--small"></div>
-              <div class="img-skeleton img-skeleton--small"></div>
+              <div class="img-skeleton img-banner-skeleton"></div>
+              <div class="gallery-skeleton-row">
+                <div class="img-skeleton img-skeleton--small"></div>
+                <div class="img-skeleton img-skeleton--small"></div>
+              </div>
             </template>
             <template v-else>
-              <img :src="liveData.heroImage" alt="UTSAVA 2025 Celebration" class="img-main" />
-              <img
-                v-for="(img, i) in (liveData.galleryImages || []).slice(0, 2)"
-                :key="i"
-                :src="img"
-                :alt="`UTSAVA 2025 gallery ${i + 1}`"
-                class="img-small"
-              />
+              <div v-if="(liveData.galleryImages || []).length" class="event-gallery-grid" :class="`gallery-count-${Math.min((liveData.galleryImages || []).length, 5)}`">
+                <img
+                  v-for="(img, i) in (liveData.galleryImages || []).slice(0, 5)"
+                  :key="i"
+                  :src="img"
+                  :alt="`UTSAVA gallery ${i + 1}`"
+                  class="gallery-img"
+                  :class="{ 'gallery-img--full': isFullWidth(i, (liveData.galleryImages || []).length) }"
+                />
+              </div>
             </template>
           </div>
         </div>
@@ -484,6 +488,13 @@ onUnmounted(() => {
   clearInterval(timer)
   document.removeEventListener('keydown', escHandler)
 })
+
+function isFullWidth(index, total) {
+  if (total <= 2) return true
+  if (total === 3) return index === 0
+  if (total === 4) return index === 0 || index === 3
+  return index === 0
+}
 </script>
 
 <style scoped>
@@ -534,12 +545,17 @@ onUnmounted(() => {
   overflow: hidden;
   text-align: center;
 }
+.event-hero[style*="--hero-bg"] {
+  background: none;
+}
 .event-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80') center/cover;
-  opacity: 0.15;
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
 }
 .event-hero-container {
   max-width: 1280px;
@@ -649,26 +665,11 @@ onUnmounted(() => {
 }
 .status-btn { opacity: 0.6; cursor: not-allowed; }
 
-.event-images-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.img-main {
-  grid-column: span 2;
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-}
-.img-small {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-}
+.event-images-wrap { display: flex; flex-direction: column; }
+.event-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gallery-count-1, .gallery-count-2 { grid-template-columns: 1fr; }
+.gallery-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; display: block; }
+.gallery-img--full { grid-column: 1 / -1; height: 280px; border-radius: 16px; }
 
 /* Loading skeletons */
 @keyframes shimmer {
@@ -681,11 +682,9 @@ onUnmounted(() => {
   background-size: 800px 100%;
   animation: shimmer 1.4s infinite linear;
 }
-.img-skeleton--main {
-  grid-column: span 2;
-  height: 250px;
-}
-.img-skeleton--small { height: 180px; }
+.img-banner-skeleton { height: 280px; }
+.gallery-skeleton-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.img-skeleton--small { height: 150px; border-radius: 12px; }
 
 /* Dialog */
 .dialog-overlay {

@@ -42,18 +42,14 @@
           </div>
 
           <div v-if="(event.galleryImages || []).length" class="event-images-wrap animate-observe delay-1">
-            <img
-              :src="(event.galleryImages || [])[0]"
-              :alt="`${event.title} featured`"
-              class="img-banner"
-            />
-            <div v-if="(event.galleryImages || []).length > 1" class="event-gallery-grid" :class="`gallery-count-${Math.min((event.galleryImages || []).length - 1, 7)}`">
+            <div class="event-gallery-grid" :class="`gallery-count-${Math.min((event.galleryImages || []).length, 5)}`">
               <img
-                v-for="(img, i) in (event.galleryImages || []).slice(1, 8)"
+                v-for="(img, i) in (event.galleryImages || []).slice(0, 5)"
                 :key="i"
                 :src="img"
-                :alt="`${event.title} gallery ${i + 2}`"
+                :alt="`${event.title} gallery ${i + 1}`"
                 class="gallery-img"
+                :class="{ 'gallery-img--full': isFullWidth(i, (event.galleryImages || []).length) }"
               />
             </div>
           </div>
@@ -120,6 +116,13 @@ onMounted(() => {
   document.querySelectorAll('.animate-observe').forEach(el => observer.observe(el))
   document.addEventListener('keydown', e => { if (e.key === 'Escape') showDialog.value = false })
 })
+
+function isFullWidth(index, total) {
+  if (total <= 2) return true
+  if (total === 3) return index === 0
+  if (total === 4) return index === 0 || index === 3
+  return index === 0
+}
 
 if (event.value) {
   const plainText = (html) => html.replace(/<[^>]+>/g, '').slice(0, 160)
@@ -206,7 +209,7 @@ if (event.value) {
   text-align: center;
 }
 .event-hero[style*="--hero-bg"] {
-  background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.75) 100%);
+  background: none;
 }
 .event-hero::before {
   content: '';
@@ -215,7 +218,6 @@ if (event.value) {
   background-image: var(--hero-bg);
   background-size: cover;
   background-position: center;
-  opacity: 0.85;
   z-index: 0;
 }
 .event-hero-container {
@@ -283,32 +285,11 @@ if (event.value) {
 }
 .status-btn { opacity: 0.6; cursor: not-allowed; }
 
-.event-images-wrap { display: flex; flex-direction: column; gap: 12px; }
-.img-banner {
-  width: 100%;
-  height: 280px;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-}
-.event-gallery-grid {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 1fr 1fr;
-}
-/* 1 image: full width */
-.gallery-count-1 { grid-template-columns: 1fr; }
-/* 2–4: 2 columns */
-.gallery-count-2, .gallery-count-3, .gallery-count-4 { grid-template-columns: 1fr 1fr; }
-/* 5+: 3 columns */
-.gallery-count-5, .gallery-count-6, .gallery-count-7, .gallery-count-8 { grid-template-columns: 1fr 1fr 1fr; }
-.gallery-img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-}
+.event-images-wrap { display: flex; flex-direction: column; }
+.event-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gallery-count-1, .gallery-count-2 { grid-template-columns: 1fr; }
+.gallery-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; display: block; }
+.gallery-img--full { grid-column: 1 / -1; height: 280px; border-radius: 16px; }
 
 /* Google Form dialog */
 .dialog-overlay {
@@ -373,10 +354,8 @@ if (event.value) {
   .event-hero { padding: 70px 0; }
   .event-hero-container { padding: 0 20px; }
   .about-event-buttons { flex-direction: column; }
-  .event-images-wrap { gap: 8px; }
-  .img-banner { height: 200px; }
-  .gallery-count-5, .gallery-count-6, .gallery-count-7, .gallery-count-8 { grid-template-columns: 1fr 1fr; }
-  .gallery-img { height: 120px; }
+  .gallery-img { height: 140px; }
+  .gallery-img--full { height: 200px; }
   .dialog-panel { height: calc(100vh - 24px); border-radius: 12px; }
   .dialog-iframe-wrap iframe { min-height: unset; }
 }

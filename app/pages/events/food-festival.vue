@@ -54,19 +54,14 @@
               </div>
             </template>
             <template v-else>
-              <img
-                v-if="(liveData.galleryImages || []).length"
-                :src="(liveData.galleryImages || [])[0]"
-                alt="Karnataka Food Festival 2026"
-                class="img-banner"
-              />
-              <div v-if="(liveData.galleryImages || []).length > 1" class="event-gallery-grid" :class="`gallery-count-${Math.min((liveData.galleryImages || []).length - 1, 7)}`">
+              <div v-if="(liveData.galleryImages || []).length" class="event-gallery-grid" :class="`gallery-count-${Math.min((liveData.galleryImages || []).length, 5)}`">
                 <img
-                  v-for="(img, i) in (liveData.galleryImages || []).slice(1, 8)"
+                  v-for="(img, i) in (liveData.galleryImages || []).slice(0, 5)"
                   :key="i"
                   :src="img"
-                  :alt="`Food Festival 2026 gallery ${i + 2}`"
+                  :alt="`Food Festival 2026 gallery ${i + 1}`"
                   class="gallery-img"
+                  :class="{ 'gallery-img--full': isFullWidth(i, (liveData.galleryImages || []).length) }"
                 />
               </div>
             </template>
@@ -238,6 +233,13 @@ onMounted(() => {
   document.querySelectorAll('.animate-observe').forEach(el => observer.observe(el))
   document.addEventListener('keydown', e => { if (e.key === 'Escape') showDialog.value = false })
 })
+
+function isFullWidth(index, total) {
+  if (total <= 2) return true
+  if (total === 3) return index === 0
+  if (total === 4) return index === 0 || index === 3
+  return index === 0
+}
 </script>
 
 <style scoped>
@@ -266,12 +268,11 @@ onMounted(() => {
   color: var(--white); padding: 100px 0; position: relative; overflow: hidden; text-align: center;
 }
 .event-hero[style*="--hero-bg"] {
-  background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.75) 100%);
+  background: none;
 }
 .event-hero::before {
   content: ''; position: absolute; inset: 0;
   background-image: var(--hero-bg); background-size: cover; background-position: center;
-  opacity: 0.85;
   z-index: 0;
 }
 .event-hero-container { max-width: 1280px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 1; }
@@ -289,12 +290,10 @@ onMounted(() => {
 .about-event-buttons { display: flex; gap: 20px; margin-top: 35px; flex-wrap: wrap; }
 .status-btn { opacity: 0.6; cursor: not-allowed; }
 .event-images-wrap { display: flex; flex-direction: column; gap: 12px; }
-.img-banner { width: 100%; height: 280px; object-fit: cover; border-radius: 16px; display: block; }
-.event-gallery-grid { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
-.gallery-count-1 { grid-template-columns: 1fr; }
-.gallery-count-2, .gallery-count-3, .gallery-count-4 { grid-template-columns: 1fr 1fr; }
-.gallery-count-5, .gallery-count-6, .gallery-count-7, .gallery-count-8 { grid-template-columns: 1fr 1fr 1fr; }
-.gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; display: block; }
+.event-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gallery-count-1, .gallery-count-2 { grid-template-columns: 1fr; }
+.gallery-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; display: block; }
+.gallery-img--full { grid-column: 1 / -1; height: 280px; border-radius: 16px; }
 @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
 .img-skeleton { border-radius: 16px; background: linear-gradient(90deg, #e8e0d8 25%, #f0e8df 50%, #e8e0d8 75%); background-size: 800px 100%; animation: shimmer 1.4s infinite linear; }
 .img-banner-skeleton { height: 280px; }
