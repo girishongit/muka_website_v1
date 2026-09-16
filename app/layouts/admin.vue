@@ -51,6 +51,14 @@ async function logout() {
   font-family: var(--admin-font-family);
   background: #F7F4F0;
 }
+.admin-shell h1,
+.admin-shell h2,
+.admin-shell h3,
+.admin-shell h4,
+.admin-shell h5,
+.admin-shell h6 {
+  font-family: var(--admin-font-family);
+}
 .admin-shell button,
 .admin-shell input,
 .admin-shell select,

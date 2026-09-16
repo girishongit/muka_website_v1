@@ -203,6 +203,12 @@
                     Total: <strong>€{{ computedTotal }}</strong>
                   </div>
                 </template>
+                <div v-else-if="form.isMember === true && membershipStatus !== 'valid'" class="tickets-hint">
+                  Enter your Membership ID above to see available tickets.
+                </div>
+                <div v-else class="tickets-hint">
+                  No tickets available at this time.
+                </div>
               </template>
 
               <NuxtTurnstile v-model="turnstileToken" class="form-turnstile" />
@@ -835,6 +841,11 @@ onUnmounted(() => {
 .tickets-loading {
   font-size: 14px; color: var(--text-light);
   padding: 16px 0; text-align: center;
+  font-family: 'Manrope', sans-serif;
+}
+.tickets-hint {
+  font-size: 14px; color: var(--text-light);
+  padding: 12px 0; font-style: italic;
   font-family: 'Manrope', sans-serif;
 }
 

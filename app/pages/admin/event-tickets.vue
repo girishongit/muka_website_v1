@@ -11,6 +11,7 @@
       <div class="et-layout">
         <!-- Left: key list -->
         <div class="et-sidebar">
+          <div class="et-sidebar-label">Event Keys</div>
           <div
             v-for="key in eventKeys"
             :key="key"
@@ -18,8 +19,10 @@
             :class="{ active: selectedKey === key }"
             @click="selectedKey = key"
           >
-            {{ key }}
+            <span class="et-key-name">{{ key }}</span>
+            <span v-if="selectedKey === key" class="et-key-indicator">›</span>
           </div>
+          <div v-if="!eventKeys.length" class="et-no-keys">No keys yet</div>
           <div class="et-add-key">
             <input v-model="newKeyInput" type="text" class="tc-input" placeholder="utsava_2027" @keydown.enter="addKey" />
             <button class="btn-admin btn-admin-secondary" @click="addKey">+ Add</button>
@@ -39,7 +42,7 @@
             <thead>
               <tr>
                 <th>ID</th><th>Label</th><th>Price</th><th>Currency</th>
-                <th>Member Plan Eligibility <span class="th-note">(comma-separated)</span></th>
+                <th>Member Plan Eligibility</th>
                 <th></th>
               </tr>
             </thead>
@@ -48,15 +51,19 @@
                 <td><input v-model="row.id" type="text" class="tc-input tc-id" /></td>
                 <td><input v-model="row.label" type="text" class="tc-input" /></td>
                 <td><input v-model.number="row.price" type="number" min="0" step="0.01" class="tc-input tc-price" /></td>
-                <td><input v-model="row.currency" type="text" class="tc-input tc-currency" maxlength="10" /></td>
+                <td><span class="tc-currency-fixed">EUR</span></td>
                 <td>
-                  <input
-                    :value="(row.memberPlanEligibility || []).join(', ')"
-                    type="text"
-                    class="tc-input"
-                    placeholder="single_adult, family"
-                    @input="row.memberPlanEligibility = $event.target.value.split(',').map(s => s.trim()).filter(Boolean)"
-                  />
+                  <div class="eligibility-checks">
+                    <label v-for="plan in memberPlans" :key="plan.value" class="eligibility-check">
+                      <input
+                        type="checkbox"
+                        :value="plan.value"
+                        :checked="(row.memberPlanEligibility || []).includes(plan.value)"
+                        @change="toggleEligibility(row, plan.value, $event.target.checked)"
+                      />
+                      {{ plan.label }}
+                    </label>
+                  </div>
                 </td>
                 <td><button class="action-btn action-btn--danger" @click="currentSet.member.splice(i,1)">✕</button></td>
               </tr>
@@ -80,7 +87,7 @@
                 <td><input v-model="row.id" type="text" class="tc-input tc-id" /></td>
                 <td><input v-model="row.label" type="text" class="tc-input" /></td>
                 <td><input v-model.number="row.price" type="number" min="0" step="0.01" class="tc-input tc-price" /></td>
-                <td><input v-model="row.currency" type="text" class="tc-input tc-currency" maxlength="10" /></td>
+                <td><span class="tc-currency-fixed">EUR</span></td>
                 <td><button class="action-btn action-btn--danger" @click="currentSet.nonMember.splice(i,1)">✕</button></td>
               </tr>
               <tr v-if="!currentSet.nonMember.length">
@@ -123,8 +130,23 @@ const saveSuccess = ref(false)
 const selectedKey = ref('')
 const newKeyInput = ref('')
 
+const memberPlans = [
+  { value: 'single_adult', label: 'Single Adult' },
+  { value: 'family',       label: 'Family' },
+  { value: 'couple',       label: 'Couple' },
+]
+
 const eventKeys  = computed(() => Object.keys(tickets.value))
 const currentSet = computed(() => tickets.value[selectedKey.value] ?? { member: [], nonMember: [] })
+
+function toggleEligibility(row, planValue, checked) {
+  const current = row.memberPlanEligibility || []
+  if (checked) {
+    if (!current.includes(planValue)) row.memberPlanEligibility = [...current, planValue]
+  } else {
+    row.memberPlanEligibility = current.filter(v => v !== planValue)
+  }
+}
 
 onMounted(async () => {
   try {
@@ -174,28 +196,49 @@ async function saveAll() {
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .section-desc { color: #666; font-size: 14px; margin-bottom: 20px; }
 .et-layout { display: flex; gap: 24px; align-items: flex-start; }
-.et-sidebar { width: 200px; flex-shrink: 0; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
-.et-key-item { padding: 10px 14px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #ececec; font-family: monospace; }
+
+/* Sidebar */
+.et-sidebar { width: 210px; flex-shrink: 0; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; background: #fff; }
+.et-sidebar-label { padding: 10px 14px 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #999; background: #f8f8f8; border-bottom: 1px solid #e8e8e8; }
+.et-key-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; font-size: 14px; cursor: pointer;
+  border-bottom: 1px solid #ececec; font-family: monospace;
+  color: #333; transition: background 0.1s;
+}
 .et-key-item:last-of-type { border-bottom: none; }
 .et-key-item:hover { background: #f5f5f5; }
-.et-key-item.active { background: #fdecea; font-weight: 600; color: #c41e3a; }
+.et-key-item.active { background: #EFF6FF; border-left: 3px solid #2563EB; color: #1D4ED8; font-weight: 600; }
+.et-key-name { flex: 1; }
+.et-key-indicator { color: #2563EB; font-size: 16px; line-height: 1; }
+.et-no-keys { padding: 12px 14px; color: #aaa; font-size: 13px; font-style: italic; }
 .et-add-key { padding: 10px; display: flex; gap: 6px; border-top: 1px solid #e0e0e0; background: #fafafa; }
 .et-add-key .tc-input { flex: 1; }
+
+/* Main panel */
 .et-main { flex: 1; min-width: 0; }
 .et-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .et-section-header h3 { font-family: monospace; font-size: 18px; margin: 0; }
 .et-table-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin: 0 0 8px; }
 .et-empty-state { color: #999; font-size: 14px; padding: 40px 0; }
 .btn-sm { font-size: 12px; padding: 5px 12px; margin-top: 8px; }
+
+/* Table */
 .tc-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .tc-table th { text-align: left; padding: 8px 10px; background: #f5f5f5; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
 .tc-table td { padding: 6px 8px; border-bottom: 1px solid #ececec; vertical-align: middle; }
-.th-note { font-weight: 400; font-size: 11px; color: #999; }
 .tc-input { width: 100%; padding: 5px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box; }
-.tc-input:focus { outline: none; border-color: #c41e3a; }
+.tc-input:focus { outline: none; border-color: #2563EB; }
 .tc-id { min-width: 120px; font-family: monospace; }
 .tc-price { max-width: 80px; }
-.tc-currency { max-width: 70px; }
+.tc-currency-fixed { display: inline-block; padding: 5px 8px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 13px; color: #555; font-weight: 500; white-space: nowrap; }
+
+/* Eligibility checkboxes */
+.eligibility-checks { display: flex; gap: 12px; flex-wrap: wrap; }
+.eligibility-check { display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; white-space: nowrap; }
+.eligibility-check input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; accent-color: #2563EB; }
+
+/* Misc */
 .empty-msg { text-align: center; color: #999; padding: 16px; }
 .action-btn--danger { background: none; border: none; color: #c41e3a; cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px; }
 .action-btn--danger:hover { background: #fdecea; }
