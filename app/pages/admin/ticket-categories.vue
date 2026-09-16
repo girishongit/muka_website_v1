@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(cat, i) in categories" :key="i" :class="{ 'row-member': cat.type === 'member' }">
+            <tr v-for="(cat, i) in categories" :key="cat.id || i" :class="{ 'row-member': cat.type === 'member' }">
               <td><input v-model="cat.id" type="text" class="tc-input tc-id" placeholder="adult_member" /></td>
               <td><input v-model="cat.label" type="text" class="tc-input" placeholder="Adult (Member)" /></td>
               <td><input v-model.number="cat.price" type="number" min="0" step="0.01" class="tc-input tc-price" /></td>
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 
 const { public: { apiBaseUrl } } = useRuntimeConfig()
 const base = apiBaseUrl.replace(/\/$/, '')
@@ -85,7 +85,7 @@ const saveSuccess = ref(false)
 
 onMounted(async () => {
   try {
-    const res = await $fetch(`${base}/admin/get-ticket-categories.php`)
+    const res = await useAdminFetch(`${base}/admin/get-ticket-categories.php`)
     categories.value = res.categories ?? []
   } catch (e) {
     loadError.value = e?.data?.error ?? 'Failed to load ticket categories.'
@@ -107,7 +107,7 @@ async function saveAll() {
   saveSuccess.value = false
   saving.value      = true
   try {
-    await $fetch(`${base}/admin/save-ticket-categories.php`, {
+    await useAdminFetch(`${base}/admin/save-ticket-categories.php`, {
       method: 'POST',
       body:   { categories: categories.value },
     })

@@ -39,6 +39,14 @@ foreach ($categories as $cat) {
     ];
 }
 
+// Reject duplicate IDs
+$ids = array_column($clean, 'id');
+if (count($ids) !== count(array_unique($ids))) {
+    http_response_code(422);
+    echo json_encode(['error' => 'Duplicate category IDs are not allowed.']);
+    exit;
+}
+
 $file = __DIR__ . '/../data/ticket-categories.json';
-file_put_contents($file, json_encode($clean, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+file_put_contents($file, json_encode($clean, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
 echo json_encode(['success' => true]);

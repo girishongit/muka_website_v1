@@ -5,6 +5,7 @@
  * built from ticket-categories.json filtered by the utsava event's ticketCategoryIds.
  * Falls back to utsava-tickets.json if no ticketCategoryIds are configured.
  */
+$corsMethod = 'GET';
 require_once __DIR__ . '/_cors.php';
 
 // Load utsava event to get configured category IDs
