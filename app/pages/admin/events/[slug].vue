@@ -128,30 +128,14 @@
           </div>
         </div>
 
-        <!-- Ticket Categories (core events only) -->
+        <!-- Ticket Key (core events only) -->
         <div v-if="isCoreEvent" class="form-section">
-          <h3 class="section-title">Ticket Categories</h3>
-          <p class="section-desc">Select which ticket categories apply to this event. Manage categories in <a href="/admin/ticket-categories" target="_blank">Ticket Categories</a>.</p>
-          <div v-if="categoriesLoadError" class="alert alert-error">{{ categoriesLoadError }}</div>
-          <div v-else-if="!allCategories.length" class="info-box">
-            <span class="info-icon">ℹ️</span> No ticket categories defined yet. <a href="/admin/ticket-categories" target="_blank">Create some first.</a>
+          <h3 class="section-title">Ticket Key</h3>
+          <div class="form-group">
+            <label>Ticket Key</label>
+            <input v-model="form.ticketKey" type="text" placeholder="utsava_2026" class="tc-id-input" />
+            <span class="help-text">Key from the <NuxtLink to="/admin/event-tickets">Event Tickets</NuxtLink> page. Leave blank for no ticket sales.</span>
           </div>
-          <template v-else>
-            <div class="tc-group" v-if="memberCategories.length">
-              <p class="tc-group-label">Member tickets</p>
-              <label v-for="cat in memberCategories" :key="cat.id" class="tc-check-label">
-                <input type="checkbox" :value="cat.id" v-model="form.ticketCategoryIds" />
-                <span>{{ cat.label }} — €{{ cat.price }} <span class="tc-id-badge">{{ cat.id }}</span></span>
-              </label>
-            </div>
-            <div class="tc-group" v-if="nonMemberCategories.length">
-              <p class="tc-group-label">Non-member tickets</p>
-              <label v-for="cat in nonMemberCategories" :key="cat.id" class="tc-check-label">
-                <input type="checkbox" :value="cat.id" v-model="form.ticketCategoryIds" />
-                <span>{{ cat.label }} — €{{ cat.price }} <span class="tc-id-badge">{{ cat.id }}</span></span>
-              </label>
-            </div>
-          </template>
         </div>
 
         <!-- Settings -->
@@ -259,28 +243,17 @@ const form = reactive({
   googleFormUrl: '', registrationStatus: 'coming_soon',
   navOrder: 99, pinToTop: false, past: false,
   published: false,
-  ticketCategoryIds: [],
+  ticketKey: '',
 })
 
 const galleryText = ref('')
-
-const allCategories       = ref([])
-const categoriesLoadError = ref('')
 
 const isCoreEvent = computed(() => CORE_SLUGS.includes(form.slug || slug))
 const isPublished = computed(() => !!form.published)
 // Core events are always editable; published non-core events are read-only
 const isReadOnly  = computed(() => isPublished.value && !isCoreEvent.value)
 
-const memberCategories    = computed(() => allCategories.value.filter(c => c.type === 'member'))
-const nonMemberCategories = computed(() => allCategories.value.filter(c => c.type === 'nonMember'))
-
 onMounted(async () => {
-  // Fetch ticket categories (non-blocking — only used by core events)
-  useAdminFetch(`${base}/admin/get-ticket-categories.php`)
-    .then(res => { allCategories.value = (res?.categories) ?? [] })
-    .catch(() => { categoriesLoadError.value = 'Could not load ticket categories.' })
-
   try {
     const all = await useAdminFetch(`${base}/admin/get-events.php`)
     const ev  = all.find(e => e.slug === slug)
@@ -459,10 +432,6 @@ async function doClone() {
   .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
   .header-actions { width: 100%; }
 }
-.tc-group { margin-bottom: 16px; }
-.tc-group-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: #888; margin: 0 0 8px; letter-spacing: 0.05em; }
-.tc-check-label { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; cursor: pointer; }
-.tc-check-label input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; }
-.tc-id-badge { font-family: monospace; font-size: 11px; background: #f0f0f0; padding: 1px 5px; border-radius: 3px; color: #666; }
+.tc-id-input { font-family: monospace; max-width: 240px; padding: 7px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
 .section-desc { color: #666; font-size: 13px; margin: -8px 0 16px; }
 </style>
