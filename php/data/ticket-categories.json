@@ -1,0 +1,8 @@
+[
+  { "id": "adult_member",  "label": "Adult (Member)",              "price": 15, "currency": "EUR", "type": "member",    "memberPlanEligibility": ["single_adult", "family"] },
+  { "id": "child_member",  "label": "Child (Member)",              "price": 5,  "currency": "EUR", "type": "member",    "memberPlanEligibility": ["family"] },
+  { "id": "early_bird",    "label": "Early Bird",                  "price": 18, "currency": "EUR", "type": "nonMember", "memberPlanEligibility": [] },
+  { "id": "adult",         "label": "Adult",                       "price": 22, "currency": "EUR", "type": "nonMember", "memberPlanEligibility": [] },
+  { "id": "student",       "label": "Student",                     "price": 12, "currency": "EUR", "type": "nonMember", "memberPlanEligibility": [] },
+  { "id": "family",        "label": "Family (2 adults + 2 children)", "price": 55, "currency": "EUR", "type": "nonMember", "memberPlanEligibility": [] }
+]
