@@ -294,6 +294,7 @@ function isFullWidth(index, total) {
 .gallery-count-1, .gallery-count-2 { grid-template-columns: 1fr; }
 .gallery-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; display: block; }
 .gallery-img--full { grid-column: 1 / -1; height: 280px; border-radius: 16px; }
+.gallery-count-1 .gallery-img--full { height: 420px; }
 @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
 .img-skeleton { border-radius: 16px; background: linear-gradient(90deg, #e8e0d8 25%, #f0e8df 50%, #e8e0d8 75%); background-size: 800px 100%; animation: shimmer 1.4s infinite linear; }
 .img-banner-skeleton { height: 280px; }

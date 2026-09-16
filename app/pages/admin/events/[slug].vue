@@ -50,7 +50,7 @@
             </div>
             <div class="form-group">
               <label>Nav Label</label>
-              <input v-model="form.navLabel" type="text" placeholder="UTSAVA 2026" :readonly="isReadOnly" :class="{ readonly: isReadOnly }" />
+              <input v-model="form.navLabel" type="text" placeholder="UTSAVA 2026" :readonly="isReadOnly || isCoreEvent" :class="{ readonly: isReadOnly || isCoreEvent }" />
               <span class="help-text">Short label used in the site navigation menu. If left blank, title is used.</span>
             </div>
           </div>

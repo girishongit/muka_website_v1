@@ -670,6 +670,7 @@ function isFullWidth(index, total) {
 .gallery-count-1, .gallery-count-2 { grid-template-columns: 1fr; }
 .gallery-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; display: block; }
 .gallery-img--full { grid-column: 1 / -1; height: 280px; border-radius: 16px; }
+.gallery-count-1 .gallery-img--full { height: 420px; }
 
 /* Loading skeletons */
 @keyframes shimmer {

@@ -290,6 +290,7 @@ if (event.value) {
 .gallery-count-1, .gallery-count-2 { grid-template-columns: 1fr; }
 .gallery-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; display: block; }
 .gallery-img--full { grid-column: 1 / -1; height: 280px; border-radius: 16px; }
+.gallery-count-1 .gallery-img--full { height: 420px; }
 
 /* Google Form dialog */
 .dialog-overlay {
@@ -356,6 +357,7 @@ if (event.value) {
   .about-event-buttons { flex-direction: column; }
   .gallery-img { height: 140px; }
   .gallery-img--full { height: 200px; }
+  .gallery-count-1 .gallery-img--full { height: 320px; }
   .dialog-panel { height: calc(100vh - 24px); border-radius: 12px; }
   .dialog-iframe-wrap iframe { min-height: unset; }
 }
