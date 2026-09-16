@@ -71,16 +71,16 @@
 </template>
 
 <script setup>
-definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
+definePageMeta({ layout: 'admin' })
 
 const { public: { apiBaseUrl } } = useRuntimeConfig()
 const base = apiBaseUrl.replace(/\/$/, '')
 
-const categories = ref([])
-const loading    = ref(true)
-const loadError  = ref('')
-const saving     = ref(false)
-const saveError  = ref('')
+const categories  = ref([])
+const loading     = ref(true)
+const loadError   = ref('')
+const saving      = ref(false)
+const saveError   = ref('')
 const saveSuccess = ref(false)
 
 onMounted(async () => {
@@ -103,13 +103,13 @@ function removeRow(i) {
 }
 
 async function saveAll() {
-  saveError.value = ''
+  saveError.value   = ''
   saveSuccess.value = false
-  saving.value = true
+  saving.value      = true
   try {
     await $fetch(`${base}/admin/save-ticket-categories.php`, {
       method: 'POST',
-      body: { categories: categories.value },
+      body:   { categories: categories.value },
     })
     saveSuccess.value = true
     setTimeout(() => { saveSuccess.value = false }, 3000)
@@ -123,7 +123,6 @@ async function saveAll() {
 
 <style scoped>
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.page-header h2 { font-family: var(--admin-font-family); font-size: 26px; font-weight: 700; margin: 0; color: #1A1A1A; }
 .section-desc { color: var(--text-light, #666); font-size: 14px; margin-bottom: 24px; }
 .tc-table-wrap { overflow-x: auto; }
 .tc-table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -142,14 +141,9 @@ async function saveAll() {
 .action-btn--danger { background: none; border: none; color: #c41e3a; cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px; }
 .action-btn--danger:hover { background: #fdecea; }
 .form-footer { margin-top: 20px; display: flex; justify-content: flex-end; }
-.alert-error  { background: #fdecea; color: #c00; padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 14px; }
+.alert-error   { background: #fdecea; color: #c00; padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 14px; }
 .alert-success { background: #e6f4ea; color: #1a7a3a; padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 14px; }
 .loading-msg { color: #888; padding: 20px 0; }
 .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.btn-admin { padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; font-family: var(--admin-font-family); cursor: pointer; transition: all 0.15s; }
-.btn-admin-primary { background: #B91C1C; color: #fff; }
-.btn-admin-primary:hover:not(:disabled) { background: #991B1B; }
-.btn-admin-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-.alert { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 12px; }
 </style>
