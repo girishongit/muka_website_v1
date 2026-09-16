@@ -277,8 +277,8 @@ const nonMemberCategories = computed(() => allCategories.value.filter(c => c.typ
 
 onMounted(async () => {
   // Fetch ticket categories (non-blocking — only used by core events)
-  $fetch(`${base}/admin/get-ticket-categories.php`)
-    .then(res => { allCategories.value = res.categories ?? [] })
+  useAdminFetch(`${base}/admin/get-ticket-categories.php`)
+    .then(res => { allCategories.value = (res?.categories) ?? [] })
     .catch(() => { categoriesLoadError.value = 'Could not load ticket categories.' })
 
   try {
