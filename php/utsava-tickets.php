@@ -24,6 +24,7 @@ if (empty($configuredIds)) {
         header('Content-Type: application/json');
         echo file_get_contents($legacyFile);
     } else {
+        header('Content-Type: application/json');
         echo json_encode(['member' => [], 'nonMember' => [], 'memberEligibility' => new stdClass()]);
     }
     exit;
@@ -56,6 +57,7 @@ foreach ($filtered as $cat) {
     }
 }
 
+header('Content-Type: application/json');
 echo json_encode([
     'member'            => $member,
     'nonMember'         => $nonMember,
