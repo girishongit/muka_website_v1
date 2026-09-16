@@ -68,7 +68,15 @@
 <script setup>
 useSeoMeta({
   title: 'Privacy Policy | Munich Kannadigaru',
-  description: 'Privacy Policy of Munich Kannadigaru e.V. — how we collect, use, and protect your data.'
+  description: 'Privacy policy for Munich Kannadigaru — how we collect, use, and protect your personal data in line with GDPR.',
+  ogTitle: 'Privacy Policy | Munich Kannadigaru',
+  ogDescription: 'Our GDPR-compliant privacy policy explaining how we handle your personal data.',
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/privacy-policy',
+  twitterCard: 'summary',
+  twitterTitle: 'Privacy Policy | Munich Kannadigaru',
+  twitterDescription: 'GDPR privacy policy for Munich Kannadigaru.',
 })
 onMounted(() => {
   const obs = new IntersectionObserver((entries) => {

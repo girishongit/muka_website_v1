@@ -99,6 +99,7 @@
     <Teleport to="body">
       <div v-if="formOpen" class="modal-backdrop" @click.self="closeForm" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-panel">
+          <div class="modal-scroll">
           <button class="modal-close" aria-label="Close" @click="closeForm">✕</button>
 
           <div v-if="formSuccess" class="modal-success">
@@ -163,21 +164,44 @@
               <h3 class="form-section-title">Class Preference</h3>
               <div class="form-group">
                 <label>Preferred Day(s) to Attend Classes <span class="required">*</span></label>
-                <p class="field-hint">Select all days that work for your family. We will try to accommodate your preference when scheduling.</p>
-                <div class="days-checkboxes">
-                  <label class="day-option" v-for="day in availableDays" :key="day">
-                    <input type="checkbox" :value="day" v-model="form.preferredDays" />
-                    <span>{{ day }}</span>
-                  </label>
+                <p class="field-hint">Select all days that could work for your family. We will try to schedule around your availability.</p>
+
+                <!-- Multi-select dropdown -->
+                <div class="multiselect" :class="{ open: daysOpen }" ref="multiselectRef">
+                  <button type="button" class="multiselect-trigger" @click="daysOpen = !daysOpen" :aria-expanded="String(daysOpen)">
+                    <span v-if="form.preferredDays.length === 0" class="multiselect-placeholder">Select preferred days…</span>
+                    <span v-else class="multiselect-chips">
+                      <span v-for="day in form.preferredDays" :key="day" class="ms-chip">
+                        {{ day }}
+                        <button type="button" class="ms-chip-remove" @click.stop="removeDay(day)" :aria-label="`Remove ${day}`">✕</button>
+                      </span>
+                    </span>
+                    <span class="multiselect-arrow" aria-hidden="true">▾</span>
+                  </button>
+
+                  <div v-if="daysOpen" class="multiselect-panel" role="listbox" aria-multiselectable="true">
+                    <label
+                      v-for="day in availableDays"
+                      :key="day"
+                      class="ms-option"
+                      :class="{ selected: form.preferredDays.includes(day) }"
+                      role="option"
+                      :aria-selected="String(form.preferredDays.includes(day))"
+                    >
+                      <input type="checkbox" :value="day" v-model="form.preferredDays" tabindex="-1" />
+                      <span class="ms-check" aria-hidden="true">{{ form.preferredDays.includes(day) ? '✓' : '' }}</span>
+                      {{ day }}
+                    </label>
+                  </div>
                 </div>
               </div>
 
               <div class="disclaimer-box">
                 <p class="disclaimer-title">Please read before submitting</p>
                 <ul class="disclaimer-list">
-                  <li>Kannada Kali is a community initiative offered on a <strong>voluntary contribution basis</strong> — there is no fixed fee. Contributions help cover material and coordination costs.</li>
-                  <li>Students will need to <strong>purchase the course workbook</strong> (available online). We will share the link after enrollment is confirmed.</li>
-                  <li>Classes run in small groups of 3–5 children and are scheduled based on availability of families and the volunteer teacher.</li>
+                  <li>Kannada Kali is a community initiative offered on a <strong>contribution basis</strong>. Contributions are fully transferred to teachers.</li>
+                  <li>Students will need to <strong>purchase the course workbook</strong> (available online). We will share book details after enrollment is confirmed.</li>
+                  <li>Classes run in small groups of 3–5 children and are scheduled based on preference of families.</li>
                   <li>We will reach out to you via phone or email to confirm your spot and share class details.</li>
                 </ul>
                 <label class="checkbox-item checkbox-confirm">
@@ -186,11 +210,14 @@
                 </label>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-full" :disabled="submitting || !form.disclaimerAccepted || form.preferredDays.length === 0">
+              <NuxtTurnstile v-model="turnstileToken" class="form-turnstile" />
+              <button type="submit" class="btn btn-primary btn-full" 
+              :disabled="submitting || !turnstileToken || !form.disclaimerAccepted || form.preferredDays.length === 0">
                 {{ submitting ? 'Submitting…' : 'Submit Enrollment →' }}
               </button>
             </form>
           </template>
+          </div><!-- /.modal-scroll -->
         </div>
       </div>
     </Teleport>
@@ -200,15 +227,39 @@
 <script setup>
 useSeoMeta({
   title: 'Kannada Kali | Munich Kannadigaru',
-  description: 'Enroll your child in Kannada Kali — weekly Kannada language classes for kids and adults in Munich.'
+  description: 'Kannada Kali — free weekly Kannada language classes for children in Munich, run by Munich Kannadigaru volunteers.',
+  ogTitle: 'Kannada Kali — Kannada Classes in Munich',
+  ogDescription: 'Free weekly Kannada language classes for kids in Munich. Enrol your child in Kannada Kali today.',
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/initiatives/kannada-kali',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Kannada Kali — Free Kannada Classes in Munich',
+  twitterDescription: 'Free Kannada language classes for children in Munich, run by Munich Kannadigaru.',
 })
+
+const { public: { apiBaseUrl } } = useRuntimeConfig()
+const kannadaKaliApiUrl = `${apiBaseUrl.replace(/\/$/, '')}/kannada-kali-enrol.php`
 
 const formOpen = ref(false)
 const submitting = ref(false)
 const formSuccess = ref(false)
 const formError = ref(false)
+const turnstileToken = ref('')
 
-const availableDays = ['Saturday', 'Sunday', 'Weekday evening (Monday–Friday)']
+const availableDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+const daysOpen = ref(false)
+const multiselectRef = ref(null)
+
+function removeDay(day) {
+  form.preferredDays = form.preferredDays.filter(d => d !== day)
+}
+
+function handleClickOutside(e) {
+  if (multiselectRef.value && !multiselectRef.value.contains(e.target)) {
+    daysOpen.value = false
+  }
+}
 
 const form = reactive({
   fatherName: '', motherName: '', email: '', phone: '',
@@ -224,6 +275,7 @@ function openForm() {
 function closeForm() {
   formOpen.value = false
   document.body.style.overflow = ''
+  turnstileToken.value = ''
   if (formSuccess.value) {
     formSuccess.value = false
     Object.assign(form, { fatherName: '', motherName: '', email: '', phone: '', kidName: '', kidAge: '', aboutFamily: '', preferredDays: [], disclaimerAccepted: false })
@@ -233,19 +285,45 @@ function closeForm() {
 async function submitForm() {
   submitting.value = true
   formError.value = false
-  await new Promise(r => setTimeout(r, 900))
-  formSuccess.value = true
-  submitting.value = false
+
+  try {
+    await $fetch(kannadaKaliApiUrl, {
+      method: 'POST',
+      body: {
+        fatherName: form.fatherName,
+        motherName: form.motherName,
+        email: form.email,
+        phone: form.phone,
+        kidName: form.kidName,
+        kidAge: form.kidAge,
+        aboutFamily: form.aboutFamily,
+        preferredDays: form.preferredDays,
+        disclaimerAccepted: form.disclaimerAccepted,
+        turnstileToken: turnstileToken.value
+      }
+    })
+
+    formSuccess.value = true
+  } catch {
+    formError.value = true
+  } finally {
+    submitting.value = false
+    turnstileToken.value = ''
+  }
 }
 
 onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target) } })
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' })
   document.querySelectorAll('.animate-observe').forEach(el => obs.observe(el))
 })
 
-onUnmounted(() => { document.body.style.overflow = '' })
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>
@@ -349,14 +427,17 @@ onUnmounted(() => { document.body.style.overflow = '' })
 .modal-panel {
   background: var(--white);
   border-radius: 24px;
-  padding: 50px;
   width: 100%;
   max-width: 720px;
-  max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
   box-shadow: 0 30px 80px rgba(0,0,0,0.2);
   animation: modalIn 0.3s ease;
+}
+.modal-scroll {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 50px;
 }
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(20px) scale(0.97); }
@@ -459,35 +540,113 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
   margin-top: 4px;
 }
 
-.days-checkboxes {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Multiselect dropdown */
+.multiselect {
+  position: relative;
 }
-.day-option {
+.multiselect-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--white);
+  border: 2px solid var(--border-light);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--text-dark);
+  text-align: left;
+  transition: border-color 0.2s;
+  min-height: 50px;
+}
+.multiselect-trigger:hover,
+.multiselect.open .multiselect-trigger {
+  border-color: rgba(196,30,58,0.4);
+}
+.multiselect-placeholder { color: var(--text-light); flex: 1; }
+.multiselect-chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.multiselect-arrow { margin-left: auto; flex-shrink: 0; color: var(--text-light); font-size: 12px; }
+
+.ms-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 10px;
+  background: rgba(196,30,58,0.08);
+  color: var(--primary-red);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.ms-chip-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--primary-red);
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+}
+.ms-chip-remove:hover { opacity: 1; }
+
+.multiselect-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 2px solid var(--border-light);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  z-index: 50;
+  overflow: hidden;
+}
+.ms-option {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 11px 16px;
   cursor: pointer;
-  padding: 12px 16px;
-  border: 2px solid var(--border-light);
-  border-radius: 10px;
-  transition: border-color 0.2s, background 0.2s;
+  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   color: var(--text-dark);
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
 }
-.day-option:hover { border-color: rgba(196,30,58,0.3); background: rgba(196,30,58,0.02); }
-.day-option input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--primary-red); cursor: pointer; flex-shrink: 0; }
-.day-option:has(input:checked) { border-color: var(--primary-red); background: rgba(196,30,58,0.04); }
+.ms-option:last-child { border-bottom: none; }
+.ms-option:hover { background: rgba(196,30,58,0.04); }
+.ms-option.selected { background: rgba(196,30,58,0.06); color: var(--primary-red); font-weight: 500; }
+.ms-option input[type="checkbox"] { display: none; }
+.ms-check {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-light);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: var(--white);
+  background: transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ms-option.selected .ms-check {
+  background: var(--primary-red);
+  border-color: var(--primary-red);
+}
 
 .btn-full { width: 100%; justify-content: center; margin-top: 5px; }
 .btn-full:disabled { opacity: 0.5; cursor: not-allowed; }
+.form-turnstile { margin-bottom: 12px; }
 
 @media (max-width: 1024px) { .phases-grid { grid-template-columns: 1fr; } }
 @media (max-width: 768px) {
-  .modal-panel { padding: 35px 24px; }
+  .modal-scroll { padding: 35px 24px; }
   .form-row { grid-template-columns: 1fr; }
   .phase-card { padding: 30px 25px; }
 }

@@ -96,7 +96,7 @@
           <h2>Join Our Community</h2>
           <p>Be part of a growing family of Kannadigas in Munich. Together we are stronger.</p>
           <div class="cta-buttons">
-            <NuxtLink to="/membership/register" class="btn btn-primary">Become a Member</NuxtLink>
+            <NuxtLink to="/membership" class="btn btn-primary">Become a Member</NuxtLink>
             <NuxtLink to="/contact" class="btn btn-outline">Contact Us</NuxtLink>
           </div>
         </div>
@@ -108,7 +108,15 @@
 <script setup>
 useSeoMeta({
   title: 'Forerunners | Munich Kannadigaru',
-  description: 'Meet the visionary leaders who built and continue to lead the Munich Kannadigaru community.'
+  description: 'Meet the visionary leaders who founded and continue to build the Munich Kannadigaru community.',
+  ogTitle: 'Forerunners — Munich Kannadigaru Leadership',
+  ogDescription: 'The founding members and current leadership of Munich Kannadigaru — the people who keep our community vibrant.',
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/forerunner',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Munich Kannadigaru — Forerunners',
+  twitterDescription: 'Meet the founders and leaders of the Munich Kannada community.',
 })
 onMounted(() => {
   const obs = new IntersectionObserver((entries) => {

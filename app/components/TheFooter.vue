@@ -9,7 +9,7 @@
           <NuxtLink to="/" class="footer-logo">
             <div class="footer-logo-icon">
               <img
-                src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=200&q=80"
+                :src="mklogo"
                 alt="Munich Kannadigaru"
               />
             </div>
@@ -86,6 +86,8 @@
 
 <script setup>
 const year = new Date().getFullYear()
+const { public: { apiBaseUrl } } = useRuntimeConfig()
+const mklogo = `${apiBaseUrl}/assets/mk-logo.ico`
 </script>
 
 <style scoped>

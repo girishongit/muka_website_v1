@@ -22,7 +22,7 @@
           </p>
 
           <div class="hero-buttons animate-item delay-5">
-            <NuxtLink to="/membership/register" class="btn btn-primary">
+            <NuxtLink to="/membership" class="btn btn-primary">
               Join Our Community <span aria-hidden="true">→</span>
             </NuxtLink>
             <NuxtLink to="/about" class="btn btn-outline">Learn More</NuxtLink>
@@ -31,19 +31,18 @@
 
         <div class="hero-image animate-from-right" ref="heroImage">
           <img
-            src="https://images.unsplash.com/photo-1616606484004-5ef3cc46e39d?w=800&q=80"
-            alt="Karnataka Heritage — Stone Chariot at Hampi"
+            :src="heroImages[currentHeroSlide].src"
+            :alt="heroImages[currentHeroSlide].label"
+            class="hero-main-img"
           />
-          <span class="image-badge-est">Est. 2019</span>
-          <!-- Transparent label directly on image -->
           <div class="image-label-overlay">
-            <small>Heritage</small>
-            <span>Stone Chariot</span>
+            <small>{{ heroImages[currentHeroSlide].category }}</small>
+            <span>{{ heroImages[currentHeroSlide].label }}</span>
           </div>
           <div class="small-image">
             <img
-              src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=200&q=80"
-              alt="Karnataka Temple"
+              :src="heroImages[(currentHeroSlide + 1) % heroImages.length].src"
+              :alt="heroImages[(currentHeroSlide + 1) % heroImages.length].label"
             />
           </div>
         </div>
@@ -165,6 +164,90 @@
       </div>
     </section>
 
+    <!-- ─── Subscribe ────────────────────────────────────────── -->
+    <section class="section subscribe-section">
+      <div class="section-container">
+        <div class="subscribe-grid animate-observe">
+          <div class="subscribe-left">
+            <span class="tag">Stay Updated</span>
+            <h2 class="subscribe-heading">
+              <span class="black">Stay in</span>
+              <span class="red"> the Loop</span>
+            </h2>
+            <p class="subscribe-kn kannada-text">ಸಂಪರ್ಕದಲ್ಲಿರಿ</p>
+            <p class="subscribe-desc">We don't spam — only community events, cultural updates, and announcements that matter to you.</p>
+
+            <div v-if="subscribeSuccess" class="subscribe-success">
+              <span class="subscribe-tick">✓</span>
+              <div>
+                <strong>You're subscribed!</strong>
+                <p>We'll keep you in the loop about community events and updates.</p>
+              </div>
+            </div>
+            <form v-else class="subscribe-form" @submit.prevent="submitSubscribe" novalidate>
+              <p v-if="subscribeError" class="subscribe-error">{{ subscribeError }}</p>
+              <div class="subscribe-inputs">
+                <input
+                  type="text"
+                  v-model="subscribeForm.name"
+                  placeholder="Your name"
+                  required
+                  class="subscribe-input"
+                />
+                <input
+                  type="email"
+                  v-model="subscribeForm.email"
+                  placeholder="your@email.com"
+                  required
+                  class="subscribe-input"
+                />
+              </div>
+              <NuxtTurnstile v-model="subscribeTurnstile" class="subscribe-turnstile" />
+              <button type="submit" class="btn btn-primary subscribe-btn" 
+              :disabled="subscribeSubmitting || !subscribeTurnstile || !subscribeForm.name || !subscribeForm.email">
+                {{ subscribeSubmitting ? 'Subscribing…' : 'Subscribe →' }}
+              </button>
+            </form>
+          </div>
+
+          <div class="subscribe-right">
+            <div class="subscribe-card">
+              <div class="subscribe-card-inner">
+                <div class="subscribe-item">
+                  <span class="subscribe-item-icon">📅</span>
+                  <div>
+                    <strong>Events</strong>
+                    <p>Festivals, sports, meetups & more</p>
+                  </div>
+                </div>
+                <div class="subscribe-item">
+                  <span class="subscribe-item-icon">🎉</span>
+                  <div>
+                    <strong>Celebrations</strong>
+                    <p>Rajyotsava, Ugadi, cultural days</p>
+                  </div>
+                </div>
+                <div class="subscribe-item">
+                  <span class="subscribe-item-icon">📣</span>
+                  <div>
+                    <strong>Announcements</strong>
+                    <p>Community news & initiatives</p>
+                  </div>
+                </div>
+                <div class="subscribe-item">
+                  <span class="subscribe-item-icon">🤝</span>
+                  <div>
+                    <strong>Volunteering</strong>
+                    <p>Ways to contribute and give back</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ─── CTA ──────────────────────────────────────────────── -->
     <section class="section cta-section">
       <div class="section-container">
@@ -172,8 +255,7 @@
           <h2>Become part of our growing community</h2>
           <p>Experience the joy of connecting with fellow Kannadigas in Munich.</p>
           <div class="cta-buttons">
-            <NuxtLink to="/membership/register" class="btn btn-primary">Join Now <span aria-hidden="true">→</span></NuxtLink>
-            <NuxtLink to="/contact" class="btn btn-outline">Contact Us</NuxtLink>
+            <NuxtLink to="/membership" class="btn btn-primary">Join Now <span aria-hidden="true">→</span></NuxtLink>
           </div>
         </div>
       </div>
@@ -184,8 +266,85 @@
 <script setup>
 useSeoMeta({
   title: 'Munich Kannadigaru — ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು',
-  description: 'A vibrant community of Kannadigas in Munich celebrating language, culture, and belonging.'
+  description: 'Munich Kannadigaru is a vibrant community of Kannada speakers in Munich, Germany — celebrating language, culture, and belonging through festivals, classes, and membership.',
+  ogTitle: 'Munich Kannadigaru — ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು',
+  ogDescription: 'A Kannada community in Munich celebrating heritage through Utsava, Kannada Kali classes, and cultural events. Join us.',
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Munich Kannadigaru — Kannada Community in Munich',
+  twitterDescription: 'Celebrating Karnataka culture in Munich through festivals, language classes, and community events.',
+  twitterImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
 })
+
+useHead({
+  script: [{
+    type: 'application/ld+json',
+    children: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Munich Kannadigaru',
+      alternateName: 'ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು',
+      url: 'https://munichkannadigaru.org',
+      logo: 'https://api.munichkannadigaru.org/public/assets/mk-logo.ico',
+      foundingDate: '2019',
+      description: 'A Kannada-speaking community in Munich, Germany, celebrating language, culture, and belonging through events, classes, and membership.',
+      email: 'info@munichkannadigaru.org',
+      location: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: 'Munich', addressCountry: 'DE' } },
+      sameAs: [
+        'https://www.facebook.com/groups/munichkannadigaru',
+        'https://www.instagram.com/munich.kannadigaru/',
+        'https://www.youtube.com/channel/UCjgYmtw7GmGs1NXoNa3oZIQ'
+      ]
+    })
+  }]
+})
+
+const { public: { apiBaseUrl } } = useRuntimeConfig()
+const subscribeApiUrl = `${apiBaseUrl.replace(/\/$/, '')}/subscribe.php`
+
+// ─── Hero image carousel ─────────────────────────────────────
+const heroImages = [
+  { src: 'https://images.unsplash.com/photo-1616606484004-5ef3cc46e39d?w=800&q=80', label: 'Stone Chariot', category: 'Heritage' },
+  { src: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800&q=80', label: 'Karnataka Temple', category: 'Culture' },
+  { src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80', label: 'Community', category: 'Together' },
+  { src: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80', label: 'Celebration', category: 'Festival' },
+  { src: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=800&q=80', label: 'Cultural Night', category: 'Events' },
+]
+const currentHeroSlide = ref(0)
+let heroTimer = null
+
+// ─── Subscribe ───────────────────────────────────────────────
+const subscribeForm = reactive({ name: '', email: '' })
+const subscribeTurnstile = ref('')
+const subscribeSubmitting = ref(false)
+const subscribeSuccess = ref(false)
+const subscribeError = ref('')
+
+async function submitSubscribe() {
+  subscribeSubmitting.value = true
+  subscribeError.value = ''
+
+  try {
+    await $fetch(subscribeApiUrl, {
+      method: 'POST',
+      body: {
+        name: subscribeForm.name,
+        email: subscribeForm.email,
+        turnstileToken: subscribeTurnstile.value
+      }
+    })
+
+    subscribeSuccess.value = true
+    Object.assign(subscribeForm, { name: '', email: '' })
+  } catch (error) {
+    subscribeError.value = error?.data?.error || 'Could not save your subscription. Please try again.'
+  } finally {
+    subscribeSubmitting.value = false
+    subscribeTurnstile.value = ''
+  }
+}
 
 // ─── Events carousel ─────────────────────────────────────────
 const carouselEvents = [
@@ -253,10 +412,13 @@ onMounted(() => {
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' })
 
   document.querySelectorAll('.animate-observe').forEach(el => observer.observe(el))
+  heroTimer = setInterval(() => {
+    currentHeroSlide.value = (currentHeroSlide.value + 1) % heroImages.length
+  }, 4000)
   startAutoPlay()
 })
 
-onUnmounted(() => { clearInterval(autoPlayTimer) })
+onUnmounted(() => { clearInterval(autoPlayTimer); clearInterval(heroTimer) })
 </script>
 
 <style scoped>
@@ -358,13 +520,14 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 
 /* Hero Image */
 .hero-image { position: relative; }
-.hero-image > img {
+.hero-main-img {
   width: 100%;
   height: 500px;
   object-fit: cover;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
   display: block;
+  transition: opacity 0.5s ease;
 }
 /* dark-to-transparent gradient at bottom for text legibility */
 .hero-image::before {
@@ -376,19 +539,6 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   border-radius: 0 0 20px 20px;
   z-index: 2;
   pointer-events: none;
-}
-.image-badge-est {
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  background: var(--gold);
-  color: var(--text-dark);
-  padding: 12px 24px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  z-index: 3;
 }
 /* Transparent label directly on image — text with subtle shadow, no box */
 .image-label-overlay {
@@ -428,7 +578,93 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   z-index: 3;
 }
-.small-image img { width: 100%; height: 100%; object-fit: cover; }
+.small-image img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease; }
+
+/* ─── Subscribe ─────────────────────────────────────────────── */
+.subscribe-section { background: var(--cream-dark); }
+.subscribe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+.subscribe-left .tag { margin-bottom: 18px; display: inline-block; }
+.subscribe-heading {
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.subscribe-kn { font-size: 18px; color: var(--primary-red); margin-bottom: 14px; }
+.subscribe-desc { color: var(--text-light); font-size: 15px; line-height: 1.7; margin-bottom: 28px; }
+.subscribe-inputs { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.subscribe-input {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 16px;
+  border: 2px solid var(--border-light);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-dark);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.subscribe-input:focus { border-color: rgba(196,30,58,0.5); }
+.subscribe-btn { white-space: nowrap; }
+.subscribe-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.subscribe-error { color: var(--primary-red); font-size: 13px; margin: 0 0 10px; }
+.subscribe-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: rgba(0,180,80,0.07);
+  border: 1px solid rgba(0,180,80,0.2);
+  border-radius: 14px;
+  padding: 20px 24px;
+}
+.subscribe-tick {
+  width: 40px;
+  height: 40px;
+  background: rgba(0,180,80,0.12);
+  color: #00B450;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.subscribe-success strong { font-size: 16px; color: var(--text-dark); display: block; margin-bottom: 4px; }
+.subscribe-success p { font-size: 13px; color: var(--text-light); margin: 0; }
+.subscribe-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+.subscribe-card-inner { display: flex; flex-direction: column; gap: 22px; }
+.subscribe-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.subscribe-item-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: rgba(196,30,58,0.07);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.subscribe-item strong { font-size: 15px; color: var(--text-dark); display: block; margin-bottom: 3px; font-family: 'Manrope', sans-serif; }
+.subscribe-item p { font-size: 13px; color: var(--text-light); margin: 0; line-height: 1.5; }
+.subscribe-turnstile { margin-bottom: 10px; }
 
 /* ─── About ─────────────────────────────────────────────────── */
 .about-section { background: #F5F5F0; }
@@ -511,7 +747,7 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 
 /* Gold theme — lighter base so text reads well, wider overlay for seamless blend */
 .event-card.theme-gold {
-  background: linear-gradient(135deg, #D4A017 0%, #C8940A 100%);
+  background: #C8940A;
   box-shadow: 0 10px 40px rgba(196, 148, 10, 0.25);
 }
 .event-card.theme-gold .event-image-overlay {
@@ -642,7 +878,7 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
 @media (max-width: 1024px) {
   .hero-container, .about-container, .event-card { grid-template-columns: 1fr; }
   .initiatives-grid { grid-template-columns: repeat(2,1fr); }
-  .hero-image img { height: 400px; }
+  .hero-main-img { height: 400px; }
   .about-image img { height: 320px; }
   .about-badge { bottom: -10px; right: 10px; }
   /* When card stacks to single column, release fixed height */
@@ -655,9 +891,10 @@ onUnmounted(() => { clearInterval(autoPlayTimer) })
   .hero-kannada { font-size: 22px; }
   .hero-buttons { flex-direction: column; }
   .hero-buttons .btn { width: 100%; justify-content: center; }
-  .hero-image img { height: 280px; }
+  .hero-main-img { height: 280px; }
   .small-image { display: none; }
-  .image-badge-est { top: -10px; right: -5px; }
+  .subscribe-grid { grid-template-columns: 1fr; gap: 30px; }
+  .subscribe-right { display: none; }
   .event-content { padding: 35px 25px; }
   .event-card { height: auto; }
   .event-image-wrap { min-height: 240px; height: auto; }

@@ -54,7 +54,7 @@
           <h2>Access Our Library</h2>
           <p>Become a member of Munich Kannadigaru to access our growing collection of Kannada literature and resources.</p>
           <div class="cta-buttons">
-            <NuxtLink to="/membership/register" class="btn btn-primary">Become a Member</NuxtLink>
+            <NuxtLink to="/membership" class="btn btn-primary">Become a Member</NuxtLink>
             <NuxtLink to="/contact" class="btn btn-outline">Contact Us</NuxtLink>
           </div>
         </div>

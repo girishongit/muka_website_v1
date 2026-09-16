@@ -92,6 +92,7 @@
     <Teleport to="body">
       <div class="dialog-overlay" :class="{ active: showDialog }" @click.self="showDialog = false">
         <div class="dialog" role="dialog" aria-modal="true" aria-label="Register for UTSAVA">
+          <div class="dialog-scroll">
           <div class="dialog-header">
             <div>
               <h3>Register for UTSAVA</h3>
@@ -118,11 +119,27 @@
               <div class="form-row">
                 <div class="form-group">
                   <label>Email Address <span class="required">*</span></label>
-                  <input type="email" v-model="form.email" required placeholder="your@email.com" />
+                  <input
+                    type="email"
+                    v-model="form.email"
+                    required
+                    placeholder="your@email.com"
+                    :class="{ 'input-invalid': emailError }"
+                    @blur="validateEmail"
+                  />
+                  <span v-if="emailError" class="field-error">{{ emailError }}</span>
                 </div>
                 <div class="form-group">
                   <label>Phone Number <span class="required">*</span></label>
-                  <input type="tel" v-model="form.phone" required placeholder="+49 123 456 789" />
+                  <input
+                    type="tel"
+                    v-model="form.phone"
+                    required
+                    placeholder="+49 123 456 789"
+                    :class="{ 'input-invalid': phoneError }"
+                    @blur="validatePhone"
+                  />
+                  <span v-if="phoneError" class="field-error">{{ phoneError }}</span>
                 </div>
               </div>
 
@@ -197,7 +214,8 @@
                 {{ submitting ? 'Submitting…' : 'Complete Registration' }}
               </button>
             </form>
-          </div>
+          </div><!-- /.dialog-body -->
+          </div><!-- /.dialog-scroll -->
         </div>
       </div>
     </Teleport>
@@ -273,6 +291,18 @@ const form = reactive({
   membershipId: '',
 })
 
+const emailError = ref('')
+const phoneError = ref('')
+
+function validateEmail() {
+  const v = form.email.trim()
+  emailError.value = v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'Please enter a valid email address.' : ''
+}
+function validatePhone() {
+  const v = form.phone.trim()
+  phoneError.value = v && !/^\+?[\d\s\-().]{7,20}$/.test(v) ? 'Please enter a valid phone number.' : ''
+}
+
 // ── Membership validation state ───────────────────────────────────────────────
 // null = not yet checked, 'checking', 'valid', 'invalid'
 const membershipStatus = ref(null)
@@ -347,6 +377,7 @@ const canSubmit = computed(() =>
   !!turnstileToken.value &&
   computedTicketPayload.value.length > 0 &&
   form.fullName && form.email && form.phone &&
+  !emailError.value && !phoneError.value &&
   form.isMember !== null &&
   (!form.isMember || (form.membershipId.trim() !== '' && membershipStatus.value === 'valid'))
 )
@@ -395,6 +426,8 @@ async function submitForm() {
     membershipType.value   = null
     eligibleIds.value      = []
     quantities.value = {}
+    emailError.value = ''
+    phoneError.value = ''
   } catch {
     formError.value = true
     turnstileToken.value = ''
@@ -421,7 +454,11 @@ function updateCountdown() {
 // ── Watch dialog open → fetch tickets ────────────────────────────────────────
 watch(showDialog, (open) => {
   if (open) fetchTickets()
-  else turnstileToken.value = ''
+  else {
+    turnstileToken.value = ''
+    emailError.value = ''
+    phoneError.value = ''
+  }
 })
 
 let escHandler
@@ -665,11 +702,15 @@ onUnmounted(() => {
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   transform: scale(0.9);
   transition: transform 0.3s;
 }
 .dialog-overlay.active .dialog { transform: scale(1); }
+.dialog-scroll {
+  max-height: 90vh;
+  overflow-y: auto;
+}
 .dialog-header {
   padding: 30px 30px 0;
   display: flex;
@@ -802,6 +843,7 @@ onUnmounted(() => {
 .membership-id-wrap input { width: 100%; }
 .input-valid  { border-color: #059669 !important; }
 .input-invalid { border-color: #dc2626 !important; }
+.field-error { display: block; margin-top: 4px; font-size: 12px; color: #dc2626; }
 .member-hint {
   font-size: 12px;
   font-family: 'Manrope', sans-serif;

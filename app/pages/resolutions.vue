@@ -55,7 +55,15 @@
 <script setup>
 useSeoMeta({
   title: 'Community Resolutions | Munich Kannadigaru',
-  description: 'Official resolutions and bylaws of Munich Kannadigaru e.V.'
+  description: 'Official resolutions and governance decisions of Munich Kannadigaru e.V. — a record of our community commitments.',
+  ogTitle: 'Munich Kannadigaru — Community Resolutions',
+  ogDescription: 'Official resolutions and governance decisions of Munich Kannadigaru e.V.',
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/resolutions',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Munich Kannadigaru — Resolutions',
+  twitterDescription: 'Official resolutions of the Munich Kannadigaru community.',
 })
 onMounted(() => {
   const obs = new IntersectionObserver((entries) => {

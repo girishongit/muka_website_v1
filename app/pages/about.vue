@@ -81,7 +81,15 @@
 <script setup>
 useSeoMeta({
   title: 'About Us | Munich Kannadigaru',
-  description: 'Learn about Munich Kannadigaru — a vibrant community dedicated to uniting Kannada speakers in Munich, Germany.'
+  description: 'Learn about Munich Kannadigaru — a vibrant community dedicated to uniting Kannada speakers in Munich, Germany, since 2019.',
+  ogTitle: 'About Munich Kannadigaru',
+  ogDescription: 'Founded in 2019, Munich Kannadigaru unites Kannada-speaking families across Munich through culture, language, and celebration.',
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/about',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'About Munich Kannadigaru',
+  twitterDescription: 'Uniting Kannada speakers in Munich since 2019 — culture, language, and community.',
 })
 
 onMounted(() => {

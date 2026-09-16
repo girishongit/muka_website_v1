@@ -86,7 +86,15 @@
 <script setup>
 useSeoMeta({
   title: 'Contact Us | Munich Kannadigaru',
-  description: "Get in touch with Munich Kannadigaru. We'd love to hear from you!"
+  description: "Get in touch with Munich Kannadigaru. Reach us by email, social media, or the contact form for any enquiries.",
+  ogTitle: 'Contact Munich Kannadigaru',
+  ogDescription: "Have a question or want to get involved? Contact the Munich Kannadigaru team — we'd love to hear from you.",
+  ogImage: 'https://api.munichkannadigaru.org/assets/misc/MembershipProcess.png',
+  ogType: 'website',
+  ogUrl: 'https://munichkannadigaru.org/contact',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Contact Munich Kannadigaru',
+  twitterDescription: 'Get in touch with the Munich Kannada community.',
 })
 
 const submitting = ref(false)

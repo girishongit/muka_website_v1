@@ -5,7 +5,7 @@
       <NuxtLink to="/" class="logo" @click="closeMenu">
         <div class="logo-icon">
           <img
-            src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=200&q=80"
+            :src="mklogo"
             alt="Munich Kannadigaru"
           />
         </div>
@@ -29,22 +29,36 @@
         <div class="nav-item">
           <span class="nav-link">Events <i class="chevron">›</i></span>
           <div class="dropdown">
-            <NuxtLink to="/events/utsava-2025" @click="closeMenu">UTSAVA 2025</NuxtLink>
+            <NuxtLink
+              v-for="event in navEvents"
+              :key="event.path"
+              :to="event.path"
+              @click="closeMenu"
+            >{{ event.navLabel }}</NuxtLink>
           </div>
         </div>
         <div class="nav-item">
           <NuxtLink to="/initiatives/kannada-kali" class="nav-link nav-direct" @click="closeMenu">Kannada Kali</NuxtLink>
         </div>
         <div class="nav-item">
-          <span class="nav-link">Membership <i class="chevron">›</i></span>
-          <div class="dropdown">
-            <NuxtLink to="/membership" @click="closeMenu">Info</NuxtLink>
-            <NuxtLink to="/membership/register" @click="closeMenu">Registration</NuxtLink>
-          </div>
+          <NuxtLink to="/membership" class="nav-link nav-direct" @click="closeMenu">Membership</NuxtLink>
         </div>
       </nav>
 
-      <NuxtLink to="/contact" class="btn btn-primary header-cta" @click="closeMenu">Contact Us</NuxtLink>
+      <div class="social-links">
+        <a href="mailto:info@munichkannadigaru.org" class="social-btn" aria-label="Email us" title="Email us">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
+        <a href="https://www.facebook.com/groups/munichkannadigaru" class="social-btn" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/munich.kannadigaru/" class="social-btn" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.youtube.com/channel/UCjgYmtw7GmGs1NXoNa3oZIQ" class="social-btn" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>
+        </a>
+      </div>
 
       <button
         class="mobile-menu-btn"
@@ -64,6 +78,38 @@
 <script setup>
 const menuOpen = ref(false)
 const isScrolled = ref(false)
+
+const { public: { apiBaseUrl } } = useRuntimeConfig()
+const mklogo = `${apiBaseUrl}/assets/mk-logo.ico`
+const eventsApiUrl = `${apiBaseUrl.replace(/\/$/, '')}/events.php`
+
+const { data: dynamicEvents } = await useAsyncData('nav-events', () =>
+  $fetch(eventsApiUrl).catch(() => [])
+)
+
+const STATIC_EVENTS = [
+  { navLabel: 'UTSAVA',         path: '/events/utsava',        pinToTop: false },
+  { navLabel: 'Ugadi',          path: '/events/ugadi',         pinToTop: false },
+  { navLabel: 'Food Festival',  path: '/events/food-festival', pinToTop: false },
+]
+
+const navEvents = computed(() => {
+  const dynamic = (dynamicEvents.value ?? [])
+    .map(e => ({
+      navLabel: e.navLabel,
+      path: `/events/${e.slug}`,
+      pinToTop: !!e.pinToTop,
+    }))
+  // Merge: dynamic entries override static ones by path; static ones fill any gaps
+  const dynamicPaths = new Set(dynamic.map(e => e.path))
+  const merged = [
+    ...dynamic,
+    ...STATIC_EVENTS.filter(e => !dynamicPaths.has(e.path)),
+  ]
+  const pinned   = merged.filter(e => e.pinToTop)
+  const unpinned = merged.filter(e => !e.pinToTop)
+  return [...pinned, ...unpinned]
+})
 
 function toggleMenu() { menuOpen.value = !menuOpen.value }
 function closeMenu() { menuOpen.value = false }
@@ -208,11 +254,31 @@ onMounted(() => {
   color: var(--primary-red);
 }
 
-/* CTA */
-.header-cta {
+/* Social links */
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   flex-shrink: 0;
-  padding: 12px 28px;
-  font-size: 14px;
+}
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-light);
+  transition: color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+.social-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.social-btn:hover {
+  color: var(--primary-red);
+  background: rgba(196,30,58,0.07);
 }
 
 /* Hamburger */
@@ -250,7 +316,6 @@ onMounted(() => {
   .logo-en { font-size: 16px; }
   .logo-kn { font-size: 11px; }
   .mobile-menu-btn { display: flex; }
-  .header-cta { display: none; }
 
   .nav {
     position: fixed;

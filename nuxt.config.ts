@@ -9,6 +9,9 @@ export default defineNuxtConfig({
     head: {
       title: 'Munich Kannadigaru — ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು',
       link: [
+        { rel: 'icon', type: 'image/jpeg', href: 'https://api.munichkannadigaru.org/public/assets/mk-logo.ico' },
+        { rel: 'shortcut icon', href: 'https://api.munichkannadigaru.org/public/assets/mk-logo.ico' },
+        { rel: 'apple-touch-icon', href: 'https://api.munichkannadigaru.org/public/assets/mk-logo.ico' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
@@ -43,18 +46,28 @@ export default defineNuxtConfig({
     name: 'Munich Kannadigaru'
   },
 
-  nitro: {
-    prerender: {
+  turnstile: {
+    siteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAADjL9aYGwFzauJw'
+  },
+
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL ?? 'https://api.munichkannadigaru.org/public'
+    }
+  },
+
+  nitro: {    prerender: {
       routes: [
         '/',
         '/about',
         '/contact',
         '/forerunner',
         '/membership',
-        '/membership/register',
         '/privacy-policy',
         '/resolutions',
         '/events/utsava-2025',
+        '/events/ugadi-2026',
+        '/events/food-festival-2026',
         '/initiatives/karnataka-cultural',
         '/initiatives/jnana-deepa',
         '/initiatives/kannada-kali'
