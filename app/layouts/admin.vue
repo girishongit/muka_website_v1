@@ -12,8 +12,8 @@
         <NuxtLink to="/admin/users" class="nav-item" active-class="active">
           <span class="nav-icon">👤</span> Admin Users
         </NuxtLink>
-        <NuxtLink to="/admin/ticket-categories" class="nav-item" active-class="active">
-          <span class="nav-icon">🎟</span> Ticket Categories
+        <NuxtLink to="/admin/event-tickets" class="nav-item" active-class="active">
+          <span class="nav-icon">🎟</span> Event Tickets
         </NuxtLink>
       </nav>
       <div class="sidebar-footer">
