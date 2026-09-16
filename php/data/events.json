@@ -19,7 +19,8 @@
     "tag": "Featured Event",
     "featured": true,
     "navOrder": 0,
-    "pinToTop": false
+    "pinToTop": false,
+    "ticketKey": "utsava_2026"
   },
   {
     "slug": "ugadi",
