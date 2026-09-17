@@ -2,8 +2,8 @@
   <div class="admin-shell">
     <aside class="admin-sidebar">
       <div class="sidebar-logo">
-        <span class="kannada-text">ಮ್ಯೂನಿಕ್</span>
-        <span>Admin</span>
+        <span class="kannada-text">ಮ್ಯೂನಿಕ್ ಕನ್ನಡಿಗರು</span>
+        <span>Administrator</span>
       </div>
       <nav class="sidebar-nav">
         <NuxtLink to="/admin/events" class="nav-item" active-class="active">
