@@ -9,6 +9,7 @@
  */
 require_once __DIR__ . '/../_cors.php';
 require_once __DIR__ . '/../Database.php';
+require_once __DIR__ . '/email.php';
 
 $body  = json_decode(file_get_contents('php://input'), true) ?? [];
 $email = trim(strtolower($body['email'] ?? ''));
@@ -43,9 +44,24 @@ $pdo->prepare("INSERT INTO admin_otps (email, otp_hash, expires_at) VALUES (?, ?
     ->execute([$email, $otpHash, $expires]);
 
 // Send OTP email
-$subject = 'Munich Kannadigaru Admin — Your OTP';
-$message = "Your one-time password is: $otp\n\nThis code expires in 10 minutes.\n\nIf you did not request this, please ignore.";
-$headers = 'From: noreply@munichkannadigaru.org';
-mail($email, $subject, $message, $headers);
+$subject = 'Munich Kannadigaru Admin — Your Login Code';
+$body    = <<<HTML
+<div style="font-family:'Manrope',Arial,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#fff;border-radius:12px;border:1px solid #e8e8e8">
+  <p style="margin:0 0 8px;font-size:13px;color:#C41E3A;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">Munich Kannadigaru Admin</p>
+  <h1 style="margin:0 0 24px;font-size:22px;color:#1a1a1a">Your one-time login code</h1>
+  <div style="background:#F7F4F0;border-radius:10px;padding:24px;text-align:center;margin-bottom:24px">
+    <span style="font-size:40px;font-weight:700;letter-spacing:12px;color:#C41E3A;font-family:monospace">[OTP]</span>
+  </div>
+  <p style="margin:0 0 8px;font-size:14px;color:#555">This code expires in <strong>10 minutes</strong>.</p>
+  <p style="margin:0;font-size:13px;color:#999">If you did not request this, you can safely ignore this email.</p>
+</div>
+HTML;
+
+try {
+    (new Email())->send($email, $subject, $body, ['OTP' => $otp]);
+} catch (\Exception $e) {
+    // Log but don't expose the error to the caller
+    error_log('OTP email failed for ' . $email . ': ' . $e->getMessage());
+}
 
 echo json_encode(['success' => true]);
