@@ -123,10 +123,6 @@
                   </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Dietary Requirements</label>
-                <input type="text" v-model="form.dietary" placeholder="Vegetarian, Vegan, Allergies, etc." />
-              </div>
               <NuxtTurnstile v-model="turnstileToken" class="form-turnstile" />
               <button type="submit" class="btn btn-primary btn-full" :disabled="submitting || !turnstileToken">
                 {{ submitting ? 'Submitting…' : 'Complete Registration' }}
@@ -147,7 +143,7 @@ useSeoMeta({
   ogDescription: "A day-long celebration of Karnataka cuisine in Munich — cooking demos, food stalls, and cultural performances.",
   ogImage: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1200&q=80',
   ogType: 'website',
-  ogUrl: 'https://munichkannadigaru.org/events/food-festival-2026',
+  ogUrl: 'https://munichkannadigaru.org/events/food-festival',
   twitterCard: 'summary_large_image',
   twitterTitle: 'Karnataka Food Festival 2026 — Munich Kannadigaru',
   twitterDescription: 'Karnataka food, culture, and community in Munich. 14 June 2026.',
@@ -173,7 +169,7 @@ useHead({
 })
 
 const DEFAULTS = {
-  slug: 'food-festival-2026',
+  slug: 'food-festival',
   title: 'Karnataka Food Festival 2026',
   kannadaTitle: 'ಕರ್ನಾಟಕ ಆಹಾರ ಉತ್ಸವ',
   tag: 'Food & Culture',
@@ -190,7 +186,7 @@ const DEFAULTS = {
   past: false,
 }
 
-const { liveData, loading } = useEventData('food-festival-2026', DEFAULTS)
+const { liveData, loading } = useEventData('food-festival', DEFAULTS)
 
 const { public: { apiBaseUrl } } = useRuntimeConfig()
 const foodFestApiUrl = `${apiBaseUrl.replace(/\/$/, '')}/food-festival-register.php`
@@ -203,7 +199,7 @@ const turnstileToken = ref('')
 
 const form = reactive({
   firstName: '', lastName: '', email: '', phone: '',
-  adults: '1', children: '0', dietary: ''
+  adults: '1', children: '0'
 })
 
 async function submitForm() {

@@ -123,10 +123,6 @@
                   </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Dietary Requirements</label>
-                <input type="text" v-model="form.dietary" placeholder="Vegetarian, Vegan, Allergies, etc." />
-              </div>
               <NuxtTurnstile v-model="turnstileToken" class="form-turnstile" />
               <button type="submit" class="btn btn-primary btn-full" :disabled="submitting || !turnstileToken">
                 {{ submitting ? 'Submitting…' : 'Complete Registration' }}
@@ -147,7 +143,7 @@ useSeoMeta({
   ogDescription: "Join Munich Kannadigaru for Ugadi 2026 — traditional rituals, cultural performances, and Karnataka cuisine in Munich.",
   ogImage: 'https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=1200&q=80',
   ogType: 'website',
-  ogUrl: 'https://munichkannadigaru.org/events/ugadi-2026',
+  ogUrl: 'https://munichkannadigaru.org/events/ugadi',
   twitterCard: 'summary_large_image',
   twitterTitle: 'Ugadi 2026 — Munich Kannadigaru',
   twitterDescription: 'Kannada New Year celebration in Munich — rituals, performances, and food.',
@@ -173,7 +169,7 @@ useHead({
 })
 
 const DEFAULTS = {
-  slug: 'ugadi-2026',
+  slug: 'ugadi',
   title: 'Ugadi 2026',
   kannadaTitle: 'ಯುಗಾದಿ ೨೦೨೬',
   tag: 'New Year Festival',
@@ -190,7 +186,7 @@ const DEFAULTS = {
   past: false,
 }
 
-const { liveData, loading } = useEventData('ugadi-2026', DEFAULTS)
+const { liveData, loading } = useEventData('ugadi', DEFAULTS)
 
 const { public: { apiBaseUrl } } = useRuntimeConfig()
 const ugadiApiUrl = `${apiBaseUrl.replace(/\/$/, '')}/ugadi-register.php`
@@ -203,7 +199,7 @@ const turnstileToken = ref('')
 
 const form = reactive({
   firstName: '', lastName: '', email: '', phone: '',
-  adults: '1', children: '0', dietary: ''
+  adults: '1', children: '0'
 })
 
 async function submitForm() {

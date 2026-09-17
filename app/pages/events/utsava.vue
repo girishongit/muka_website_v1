@@ -12,27 +12,7 @@
         <p class="event-kannada kannada-text animate-item delay-2">"{{ liveData.kannadaTitle }}"</p>
         <p class="event-desc animate-item delay-3">Our flagship annual cultural festival celebrating Karnataka's rich heritage through music, dance, food, and community bonding.</p>
 
-        <!-- Countdown (only shown when event is upcoming) -->
-        <div v-if="!liveData.past" class="countdown animate-item delay-4">
-          <div class="countdown-item">
-            <div class="cd-number">{{ countdown.days }}</div>
-            <div class="cd-label">Days</div>
-          </div>
-          <div class="countdown-item">
-            <div class="cd-number">{{ countdown.hours }}</div>
-            <div class="cd-label">Hours</div>
-          </div>
-          <div class="countdown-item">
-            <div class="cd-number">{{ countdown.minutes }}</div>
-            <div class="cd-label">Minutes</div>
-          </div>
-          <div class="countdown-item">
-            <div class="cd-number">{{ countdown.seconds }}</div>
-            <div class="cd-label">Seconds</div>
-          </div>
-        </div>
-
-        <div class="event-info animate-item delay-5">
+        <div class="event-info animate-item delay-4">
           <div class="event-info-item"><span class="info-icon">📅</span> {{ liveData.date }}</div>
           <div v-if="liveData.time" class="event-info-item"><span class="info-icon">🕙</span> {{ liveData.time }}</div>
           <div v-if="liveData.venue" class="event-info-item"><span class="info-icon">📍</span> {{ liveData.venue }}</div>
@@ -446,21 +426,6 @@ async function submitForm() {
   }
 }
 
-// ── Countdown ────────────────────────────────────────────────────────────────
-const countdown = reactive({ days: '00', hours: '00', minutes: '00', seconds: '00' })
-
-function updateCountdown() {
-  if (!liveData.value?.date) return
-  const eventDate = new Date(liveData.value.date).getTime()
-  const dist = eventDate - Date.now()
-  if (dist > 0) {
-    countdown.days    = String(Math.floor(dist / 86400000)).padStart(2, '0')
-    countdown.hours   = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0')
-    countdown.minutes = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0')
-    countdown.seconds = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0')
-  }
-}
-
 // ── Watch dialog open → fetch tickets ────────────────────────────────────────
 watch(showDialog, (open) => {
   if (open) fetchTickets()
@@ -472,11 +437,7 @@ watch(showDialog, (open) => {
 })
 
 let escHandler
-let timer
 onMounted(() => {
-  updateCountdown()
-  timer = setInterval(updateCountdown, 1000)
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target) } })
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' })
@@ -485,7 +446,6 @@ onMounted(() => {
   document.addEventListener('keydown', escHandler)
 })
 onUnmounted(() => {
-  clearInterval(timer)
   document.removeEventListener('keydown', escHandler)
 })
 
@@ -587,35 +547,6 @@ function isFullWidth(index, total) {
   max-width: 600px;
   margin: 0 auto 40px;
   color: var(--white);
-}
-
-.countdown {
-  display: flex;
-  gap: 25px;
-  justify-content: center;
-  margin: 40px 0;
-  flex-wrap: wrap;
-}
-.countdown-item {
-  background: rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 25px 35px;
-  text-align: center;
-  min-width: 100px;
-}
-.cd-number {
-  font-size: clamp(36px, 5vw, 52px);
-  font-weight: 700;
-  font-family: 'Playfair Display', serif;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 5px;
-}
-.cd-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.8;
 }
 
 .event-info {
@@ -755,8 +686,7 @@ function isFullWidth(index, total) {
 @media (max-width: 768px) {
   .event-hero { padding: 70px 0; }
   .event-hero-container { padding: 0 20px; }
-  .countdown { gap: 12px; }
-  .countdown-item { padding: 18px 20px; min-width: 70px; }
+
   .about-event-buttons { flex-direction: column; }
   .form-row { grid-template-columns: 1fr; }
 }
