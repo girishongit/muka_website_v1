@@ -15,6 +15,9 @@
         <NuxtLink to="/admin/event-tickets" class="nav-item" active-class="active">
           <span class="nav-icon">🎟</span> Event Tickets
         </NuxtLink>
+        <NuxtLink to="/admin/media" class="nav-item" active-class="active">
+          <span class="nav-icon">🖼️</span> Media
+        </NuxtLink>
       </nav>
       <div class="sidebar-footer">
         <span class="sidebar-user">{{ adminEmail }}</span>

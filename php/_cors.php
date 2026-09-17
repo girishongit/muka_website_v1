@@ -13,6 +13,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 $allowedOrigins = [
     'https://munichkannadigaru.org',
+    'https://new.munichkannadigaru.org',
     'http://localhost:3000',
 ];
 

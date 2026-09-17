@@ -315,6 +315,7 @@ onMounted(() => {
   .logo-icon { width: 40px; height: 40px; }
   .logo-en { font-size: 16px; }
   .logo-kn { font-size: 11px; }
+  .social-links { display: none; }
   .mobile-menu-btn { display: flex; }
 
   .nav {

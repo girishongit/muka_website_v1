@@ -1,0 +1,3 @@
+# Ignore uploaded images — stored on server, not in git
+*
+!.gitignore
