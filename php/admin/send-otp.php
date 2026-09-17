@@ -58,10 +58,11 @@ $body    = <<<HTML
 HTML;
 
 try {
+    error_log('[send-otp] attempting email to ' . $email);
     (new Email())->send($email, $subject, $body, ['OTP' => $otp]);
+    error_log('[send-otp] email dispatched successfully to ' . $email);
 } catch (\Exception $e) {
-    // Log but don't expose the error to the caller
-    error_log('OTP email failed for ' . $email . ': ' . $e->getMessage());
+    error_log('[send-otp] email FAILED for ' . $email . ': ' . $e->getMessage());
 }
 
 echo json_encode(['success' => true]);
